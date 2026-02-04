@@ -1020,6 +1020,137 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
+
+        /* ==================== NOTICES SECTION ==================== */
+        .notices-templates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .template-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .template-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .template-card.selected {
+            border-color: var(--color-primary);
+            background: rgba(45, 90, 74, 0.05);
+        }
+
+        .template-icon {
+            font-size: 2rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .template-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .template-type {
+            font-size: 0.625rem;
+            padding: 2px 6px;
+            border-radius: var(--radius-full);
+            margin-top: var(--space-xs);
+            display: inline-block;
+        }
+
+        .template-type.urgent { background: var(--color-danger-bg); color: var(--color-danger); }
+        .template-type.event { background: var(--color-info-bg); color: var(--color-info); }
+        .template-type.info { background: var(--color-success-bg); color: var(--color-success); }
+        .template-type.maintenance { background: var(--color-warning-bg); color: var(--color-warning); }
+
+        .active-notices-list {
+            margin-top: var(--space-lg);
+        }
+
+        .active-notice-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .active-notice-icon {
+            font-size: 1.5rem;
+        }
+
+        .active-notice-info {
+            flex: 1;
+        }
+
+        .active-notice-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .active-notice-date {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .btn-delete {
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--color-danger-bg);
+            color: var(--color-danger);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .btn-delete:hover {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        .btn-send-notice {
+            width: 100%;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            margin-top: var(--space-md);
+        }
+
+        .btn-send-notice:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-send-notice:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-send-notice.sent {
+            background: var(--color-success);
+        }
     </style>
 </head>
 <body>
@@ -1039,7 +1170,7 @@
                 admin: 'מנהל',
                 building: 'מגדלי הים',
                 stats: { balance: 'יתרה', debtors: 'חייבים', apartments: 'דירות' },
-                tabs: { finance: 'כספים', debtors: 'חייבים', expenses: 'הוצאות', users: 'משתמשים', admins: 'מנהלים' },
+                tabs: { finance: 'כספים', debtors: 'חייבים', expenses: 'הוצאות', users: 'משתמשים', notices: 'הודעות', admins: 'מנהלים' },
                 finance: {
                     title: 'סיכום חודשי',
                     period: 'פברואר 2025',
@@ -1086,6 +1217,25 @@
                     reject: 'דחה',
                     empty: 'אין משתמשים רשומים עדיין'
                 },
+                notices: {
+                    title: 'שליחת הודעות',
+                    templates: 'תבניות מוכנות',
+                    active: 'הודעות פעילות',
+                    send: 'שלח הודעה',
+                    sent: 'נשלח!',
+                    delete: 'מחק',
+                    noActive: 'אין הודעות פעילות',
+                    templateList: [
+                        { id: 'water', icon: '🚰', title: 'הפסקת מים מתוכננת', type: 'urgent' },
+                        { id: 'elevator', icon: '🛗', title: 'תחזוקת מעלית', type: 'maintenance' },
+                        { id: 'meeting', icon: '📋', title: 'אסיפת דיירים', type: 'event' },
+                        { id: 'cleaning', icon: '🧹', title: 'עדכון שעות ניקיון', type: 'info' },
+                        { id: 'electricity', icon: '⚡', title: 'הפסקת חשמל', type: 'urgent' },
+                        { id: 'parking', icon: '🚗', title: 'הודעה על חניה', type: 'info' },
+                        { id: 'pest', icon: '🐜', title: 'הדברה בבניין', type: 'maintenance' },
+                        { id: 'event', icon: '🎉', title: 'אירוע קהילתי', type: 'event' }
+                    ]
+                },
                 nav: { dashboard: 'בקרה', residents: 'דיירים', settings: 'הגדרות', exit: 'יציאה' },
                 admins: {
                     title: 'ניהול מנהלים',
@@ -1106,7 +1256,7 @@
                 admin: 'Admin',
                 building: 'Sea Towers',
                 stats: { balance: 'Balance', debtors: 'Debtors', apartments: 'Apartments' },
-                tabs: { finance: 'Finance', debtors: 'Debtors', expenses: 'Expenses', users: 'Users', admins: 'Admins' },
+                tabs: { finance: 'Finance', debtors: 'Debtors', expenses: 'Expenses', users: 'Users', notices: 'Notices', admins: 'Admins' },
                 finance: {
                     title: 'Monthly Summary',
                     period: 'February 2025',
@@ -1152,6 +1302,25 @@
                     approve: 'Approve',
                     reject: 'Reject',
                     empty: 'No registered users yet'
+                },
+                notices: {
+                    title: 'Send Notices',
+                    templates: 'Quick Templates',
+                    active: 'Active Notices',
+                    send: 'Send Notice',
+                    sent: 'Sent!',
+                    delete: 'Delete',
+                    noActive: 'No active notices',
+                    templateList: [
+                        { id: 'water', icon: '🚰', title: 'Planned Water Shutdown', type: 'urgent' },
+                        { id: 'elevator', icon: '🛗', title: 'Elevator Maintenance', type: 'maintenance' },
+                        { id: 'meeting', icon: '📋', title: 'Residents Meeting', type: 'event' },
+                        { id: 'cleaning', icon: '🧹', title: 'Cleaning Hours Update', type: 'info' },
+                        { id: 'electricity', icon: '⚡', title: 'Power Outage', type: 'urgent' },
+                        { id: 'parking', icon: '🚗', title: 'Parking Notice', type: 'info' },
+                        { id: 'pest', icon: '🐜', title: 'Pest Control', type: 'maintenance' },
+                        { id: 'event', icon: '🎉', title: 'Community Event', type: 'event' }
+                    ]
                 },
                 nav: { dashboard: 'Dashboard', residents: 'Residents', settings: 'Settings', exit: 'Exit' },
                 admins: {
@@ -1437,6 +1606,112 @@
             );
         };
 
+        // Notices Section for Admin
+        const NoticesSection = () => {
+            const { t, lang } = useLanguage();
+            const [selectedTemplate, setSelectedTemplate] = useState(null);
+            const [activeNotices, setActiveNotices] = useState([]);
+            const [sendingStatus, setSendingStatus] = useState('idle'); // idle, sending, sent
+
+            const handleSelectTemplate = (template) => {
+                setSelectedTemplate(template.id === selectedTemplate ? null : template.id);
+                setSendingStatus('idle');
+            };
+
+            const handleSendNotice = () => {
+                if (!selectedTemplate) return;
+
+                const template = t.notices.templateList.find(t => t.id === selectedTemplate);
+                if (!template) return;
+
+                setSendingStatus('sending');
+
+                // Simulate sending (in real app, this would save to database)
+                setTimeout(() => {
+                    const newNotice = {
+                        id: Date.now(),
+                        icon: template.icon,
+                        title: template.title,
+                        type: template.type,
+                        date: new Date().toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US')
+                    };
+                    setActiveNotices(prev => [newNotice, ...prev]);
+                    setSendingStatus('sent');
+                    setTimeout(() => {
+                        setSelectedTemplate(null);
+                        setSendingStatus('idle');
+                    }, 1500);
+                }, 500);
+            };
+
+            const handleDeleteNotice = (id) => {
+                setActiveNotices(prev => prev.filter(n => n.id !== id));
+            };
+
+            const typeLabels = {
+                urgent: lang === 'he' ? 'דחוף' : 'Urgent',
+                event: lang === 'he' ? 'אירוע' : 'Event',
+                info: lang === 'he' ? 'מידע' : 'Info',
+                maintenance: lang === 'he' ? 'תחזוקה' : 'Maintenance'
+            };
+
+            return (
+                <div>
+                    <div className="admin-management-card">
+                        <div className="admin-section-title">{t.notices.templates}</div>
+                        <div className="notices-templates-grid">
+                            {t.notices.templateList.map(template => (
+                                <div
+                                    key={template.id}
+                                    className={`template-card ${selectedTemplate === template.id ? 'selected' : ''}`}
+                                    onClick={() => handleSelectTemplate(template)}
+                                >
+                                    <div className="template-icon">{template.icon}</div>
+                                    <div className="template-title">{template.title}</div>
+                                    <span className={`template-type ${template.type}`}>
+                                        {typeLabels[template.type]}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button
+                            className={`btn-send-notice ${sendingStatus === 'sent' ? 'sent' : ''}`}
+                            onClick={handleSendNotice}
+                            disabled={!selectedTemplate || sendingStatus === 'sending'}
+                        >
+                            {sendingStatus === 'sent' ? `✓ ${t.notices.sent}` : `📢 ${t.notices.send}`}
+                        </button>
+                    </div>
+
+                    <div className="admin-management-card">
+                        <div className="admin-section-title">{t.notices.active}</div>
+                        {activeNotices.length === 0 ? (
+                            <div className="no-admins-message">{t.notices.noActive}</div>
+                        ) : (
+                            <div className="active-notices-list">
+                                {activeNotices.map(notice => (
+                                    <div key={notice.id} className="active-notice-card">
+                                        <div className="active-notice-icon">{notice.icon}</div>
+                                        <div className="active-notice-info">
+                                            <div className="active-notice-title">{notice.title}</div>
+                                            <div className="active-notice-date">{notice.date}</div>
+                                        </div>
+                                        <button
+                                            className="btn-delete"
+                                            onClick={() => handleDeleteNotice(notice.id)}
+                                        >
+                                            {t.notices.delete}
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
         // Admin verification helper
         const getConfig = () => {
             return window.APP_CONFIG || {
@@ -1645,6 +1920,7 @@
                 { id: 'debtors', icon: '📋', label: t.tabs.debtors },
                 { id: 'expenses', icon: '🧾', label: t.tabs.expenses },
                 { id: 'users', icon: '👥', label: t.tabs.users },
+                { id: 'notices', icon: '📢', label: t.tabs.notices },
                 { id: 'admins', icon: '👑', label: t.tabs.admins }
             ];
 
@@ -1691,6 +1967,7 @@
                         {activeTab === 'debtors' && <DebtorsSection />}
                         {activeTab === 'expenses' && <ExpensesSection onAdd={() => setShowExpenseModal(true)} />}
                         {activeTab === 'users' && <UsersSection />}
+                        {activeTab === 'notices' && <NoticesSection />}
                         {activeTab === 'admins' && <AdminsSection />}
                     </main>
 
