@@ -1160,6 +1160,10 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- Supabase Client (for authentication) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="src/supabase.js"></script>
+
     <script type="text/babel">
         const { useState, useEffect, createContext, useContext } = React;
 
@@ -1170,7 +1174,7 @@
                 admin: 'מנהל',
                 building: 'מגדלי הים',
                 stats: { balance: 'יתרה', debtors: 'חייבים', apartments: 'דירות' },
-                tabs: { finance: 'כספים', debtors: 'חייבים', expenses: 'הוצאות', users: 'משתמשים', faults: 'תקלות', notices: 'הודעות', admins: 'מנהלים' },
+                tabs: { finance: 'כספים', debtors: 'חייבים', expenses: 'הוצאות', users: 'משתמשים', faults: 'תקלות', notices: 'הודעות', polls: 'סקרים', professionals: 'אנשי מקצוע', marketplace: 'לוח מודעות', admins: 'מנהלים' },
                 finance: {
                     title: 'סיכום חודשי',
                     period: 'פברואר 2025',
@@ -1247,6 +1251,57 @@
                     markFixed: 'סמן כטופל',
                     delete: 'מחק'
                 },
+                polls: {
+                    title: 'ניהול סקרים',
+                    create: 'צור סקר חדש',
+                    question: 'שאלה',
+                    options: 'אפשרויות',
+                    addOption: 'הוסף אפשרות',
+                    active: 'סקרים פעילים',
+                    ended: 'סקרים שהסתיימו',
+                    votes: 'הצבעות',
+                    close: 'סגור סקר',
+                    delete: 'מחק',
+                    empty: 'אין סקרים פעילים',
+                    placeholder: 'הקלד את השאלה...',
+                    optionPlaceholder: 'אפשרות'
+                },
+                professionals: {
+                    title: 'ניהול אנשי מקצוע',
+                    add: 'הוסף איש מקצוע',
+                    name: 'שם',
+                    profession: 'מקצוע',
+                    phone: 'טלפון',
+                    description: 'תיאור',
+                    pending: 'ממתינים לאישור',
+                    approved: 'מאושרים',
+                    approve: 'אשר',
+                    reject: 'דחה',
+                    delete: 'מחק',
+                    empty: 'אין אנשי מקצוע',
+                    professions: {
+                        plumber: 'אינסטלטור',
+                        electrician: 'חשמלאי',
+                        handyman: 'איש תחזוקה',
+                        cleaner: 'מנקה',
+                        painter: 'צבעי',
+                        locksmith: 'מנעולן',
+                        ac: 'מיזוג אוויר',
+                        other: 'אחר'
+                    }
+                },
+                marketplace: {
+                    title: 'ניהול לוח מודעות',
+                    active: 'מודעות פעילות',
+                    all: 'הכל',
+                    sell: 'למכירה',
+                    buy: 'קנייה',
+                    give: 'לתת',
+                    seek: 'מחפש',
+                    delete: 'מחק',
+                    empty: 'אין מודעות פעילות',
+                    by: 'מאת'
+                },
                 nav: { dashboard: 'בקרה', residents: 'דיירים', faults: 'תקלות', settings: 'הגדרות', exit: 'יציאה' },
                 admins: {
                     title: 'ניהול מנהלים',
@@ -1267,7 +1322,7 @@
                 admin: 'Admin',
                 building: 'Sea Towers',
                 stats: { balance: 'Balance', debtors: 'Debtors', apartments: 'Apartments' },
-                tabs: { finance: 'Finance', debtors: 'Debtors', expenses: 'Expenses', users: 'Users', faults: 'Faults', notices: 'Notices', admins: 'Admins' },
+                tabs: { finance: 'Finance', debtors: 'Debtors', expenses: 'Expenses', users: 'Users', faults: 'Faults', notices: 'Notices', polls: 'Polls', professionals: 'Professionals', marketplace: 'Marketplace', admins: 'Admins' },
                 finance: {
                     title: 'Monthly Summary',
                     period: 'February 2025',
@@ -1343,6 +1398,57 @@
                     markProgress: 'Mark In Progress',
                     markFixed: 'Mark Fixed',
                     delete: 'Delete'
+                },
+                polls: {
+                    title: 'Polls Management',
+                    create: 'Create New Poll',
+                    question: 'Question',
+                    options: 'Options',
+                    addOption: 'Add Option',
+                    active: 'Active Polls',
+                    ended: 'Ended Polls',
+                    votes: 'votes',
+                    close: 'Close Poll',
+                    delete: 'Delete',
+                    empty: 'No active polls',
+                    placeholder: 'Enter your question...',
+                    optionPlaceholder: 'Option'
+                },
+                professionals: {
+                    title: 'Professionals Management',
+                    add: 'Add Professional',
+                    name: 'Name',
+                    profession: 'Profession',
+                    phone: 'Phone',
+                    description: 'Description',
+                    pending: 'Pending Approval',
+                    approved: 'Approved',
+                    approve: 'Approve',
+                    reject: 'Reject',
+                    delete: 'Delete',
+                    empty: 'No professionals',
+                    professions: {
+                        plumber: 'Plumber',
+                        electrician: 'Electrician',
+                        handyman: 'Handyman',
+                        cleaner: 'Cleaner',
+                        painter: 'Painter',
+                        locksmith: 'Locksmith',
+                        ac: 'AC Technician',
+                        other: 'Other'
+                    }
+                },
+                marketplace: {
+                    title: 'Marketplace Management',
+                    active: 'Active Listings',
+                    all: 'All',
+                    sell: 'For Sale',
+                    buy: 'Buying',
+                    give: 'Giving Away',
+                    seek: 'Seeking',
+                    delete: 'Delete',
+                    empty: 'No active listings',
+                    by: 'by'
                 },
                 nav: { dashboard: 'Dashboard', residents: 'Residents', faults: 'Faults', settings: 'Settings', exit: 'Exit' },
                 admins: {
@@ -1958,6 +2064,431 @@
             );
         };
 
+        // Polls Section for Admin
+        const PollsSection = () => {
+            const { t, lang } = useLanguage();
+            const [polls, setPolls] = useState([]);
+            const [showForm, setShowForm] = useState(false);
+            const [question, setQuestion] = useState('');
+            const [options, setOptions] = useState(['', '']);
+
+            const handleAddOption = () => {
+                if (options.length < 6) {
+                    setOptions([...options, '']);
+                }
+            };
+
+            const handleOptionChange = (index, value) => {
+                const newOptions = [...options];
+                newOptions[index] = value;
+                setOptions(newOptions);
+            };
+
+            const handleRemoveOption = (index) => {
+                if (options.length > 2) {
+                    setOptions(options.filter((_, i) => i !== index));
+                }
+            };
+
+            const handleCreatePoll = () => {
+                if (!question.trim() || options.filter(o => o.trim()).length < 2) return;
+
+                const newPoll = {
+                    id: Date.now(),
+                    question: question.trim(),
+                    options: options.filter(o => o.trim()).map((text, i) => ({
+                        id: `opt_${i}`,
+                        text,
+                        votes: 0
+                    })),
+                    isActive: true,
+                    totalVotes: 0,
+                    createdAt: new Date().toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US')
+                };
+
+                setPolls([newPoll, ...polls]);
+                setQuestion('');
+                setOptions(['', '']);
+                setShowForm(false);
+            };
+
+            const handleClosePoll = (id) => {
+                setPolls(polls.map(p => p.id === id ? { ...p, isActive: false } : p));
+            };
+
+            const handleDeletePoll = (id) => {
+                if (confirm(lang === 'he' ? 'למחוק את הסקר?' : 'Delete this poll?')) {
+                    setPolls(polls.filter(p => p.id !== id));
+                }
+            };
+
+            return (
+                <div>
+                    {/* Create Poll Form */}
+                    <div className="admin-management-card">
+                        <div className="admin-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>{t.polls.create}</span>
+                            <button
+                                onClick={() => setShowForm(!showForm)}
+                                style={{
+                                    background: showForm ? 'var(--color-primary)' : 'var(--color-sand)',
+                                    color: showForm ? 'white' : 'var(--color-text)',
+                                    border: 'none',
+                                    borderRadius: 'var(--radius-full)',
+                                    padding: 'var(--space-xs) var(--space-md)',
+                                    cursor: 'pointer',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600
+                                }}
+                            >
+                                {showForm ? '✕' : '➕'}
+                            </button>
+                        </div>
+
+                        {showForm && (
+                            <div style={{ marginTop: 'var(--space-md)' }}>
+                                <div className="form-group">
+                                    <label className="form-label">{t.polls.question}</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={question}
+                                        onChange={(e) => setQuestion(e.target.value)}
+                                        placeholder={t.polls.placeholder}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">{t.polls.options}</label>
+                                    {options.map((opt, index) => (
+                                        <div key={index} style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)' }}>
+                                            <input
+                                                type="text"
+                                                className="form-input"
+                                                value={opt}
+                                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                                                placeholder={`${t.polls.optionPlaceholder} ${index + 1}`}
+                                                style={{ flex: 1 }}
+                                            />
+                                            {options.length > 2 && (
+                                                <button
+                                                    onClick={() => handleRemoveOption(index)}
+                                                    style={{
+                                                        background: 'var(--color-danger-bg)',
+                                                        color: 'var(--color-danger)',
+                                                        border: 'none',
+                                                        borderRadius: 'var(--radius-sm)',
+                                                        width: '40px',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    ✕
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {options.length < 6 && (
+                                        <button
+                                            onClick={handleAddOption}
+                                            style={{
+                                                background: 'var(--color-sand)',
+                                                border: 'none',
+                                                borderRadius: 'var(--radius-sm)',
+                                                padding: 'var(--space-sm) var(--space-md)',
+                                                cursor: 'pointer',
+                                                fontSize: '0.8125rem'
+                                            }}
+                                        >
+                                            ➕ {t.polls.addOption}
+                                        </button>
+                                    )}
+                                </div>
+                                <button
+                                    className="btn-send-notice"
+                                    onClick={handleCreatePoll}
+                                    disabled={!question.trim() || options.filter(o => o.trim()).length < 2}
+                                >
+                                    📊 {t.polls.create}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Active Polls */}
+                    <div className="admin-management-card">
+                        <div className="admin-section-title">{t.polls.active}</div>
+                        {polls.filter(p => p.isActive).length === 0 ? (
+                            <div className="no-admins-message">{t.polls.empty}</div>
+                        ) : (
+                            polls.filter(p => p.isActive).map(poll => (
+                                <div key={poll.id} className="active-notice-card" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
+                                        <strong>{poll.question}</strong>
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{poll.createdAt}</span>
+                                    </div>
+                                    {poll.options.map(opt => (
+                                        <div key={opt.id} style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            padding: 'var(--space-xs) var(--space-sm)',
+                                            background: 'var(--color-sand)',
+                                            borderRadius: 'var(--radius-sm)',
+                                            marginBottom: 'var(--space-xs)',
+                                            fontSize: '0.875rem'
+                                        }}>
+                                            <span>{opt.text}</span>
+                                            <span style={{ fontWeight: 600 }}>{opt.votes} {t.polls.votes}</span>
+                                        </div>
+                                    ))}
+                                    <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
+                                        <button className="btn-delete" onClick={() => handleClosePoll(poll.id)}>
+                                            {t.polls.close}
+                                        </button>
+                                        <button className="btn-delete" onClick={() => handleDeletePoll(poll.id)}>
+                                            {t.polls.delete}
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Professionals Section for Admin
+        const ProfessionalsSection = () => {
+            const { t, lang } = useLanguage();
+            const [professionals, setProfessionals] = useState([]);
+            const [filter, setFilter] = useState('all');
+            const [showForm, setShowForm] = useState(false);
+            const [formData, setFormData] = useState({ name: '', profession: 'plumber', phone: '', description: '' });
+
+            const professionIcons = {
+                plumber: '🔧',
+                electrician: '⚡',
+                handyman: '🛠️',
+                cleaner: '🧹',
+                painter: '🎨',
+                locksmith: '🔑',
+                ac: '❄️',
+                other: '👷'
+            };
+
+            const handleAddProfessional = () => {
+                if (!formData.name.trim() || !formData.phone.trim()) return;
+
+                const newPro = {
+                    id: Date.now(),
+                    ...formData,
+                    isApproved: true, // Admin adds directly as approved
+                    rating: 0,
+                    ratingCount: 0,
+                    createdAt: new Date().toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US')
+                };
+
+                setProfessionals([newPro, ...professionals]);
+                setFormData({ name: '', profession: 'plumber', phone: '', description: '' });
+                setShowForm(false);
+            };
+
+            const handleApprove = (id) => {
+                setProfessionals(professionals.map(p => p.id === id ? { ...p, isApproved: true } : p));
+            };
+
+            const handleDelete = (id) => {
+                if (confirm(lang === 'he' ? 'למחוק?' : 'Delete?')) {
+                    setProfessionals(professionals.filter(p => p.id !== id));
+                }
+            };
+
+            const filteredPros = filter === 'all' ? professionals :
+                filter === 'pending' ? professionals.filter(p => !p.isApproved) :
+                professionals.filter(p => p.isApproved);
+
+            return (
+                <div>
+                    {/* Add Professional Form */}
+                    <div className="admin-management-card">
+                        <div className="admin-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>{t.professionals.add}</span>
+                            <button
+                                onClick={() => setShowForm(!showForm)}
+                                style={{
+                                    background: showForm ? 'var(--color-primary)' : 'var(--color-sand)',
+                                    color: showForm ? 'white' : 'var(--color-text)',
+                                    border: 'none',
+                                    borderRadius: 'var(--radius-full)',
+                                    padding: 'var(--space-xs) var(--space-md)',
+                                    cursor: 'pointer',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600
+                                }}
+                            >
+                                {showForm ? '✕' : '➕'}
+                            </button>
+                        </div>
+
+                        {showForm && (
+                            <div style={{ marginTop: 'var(--space-md)' }}>
+                                <div className="form-group">
+                                    <label className="form-label">{t.professionals.name}</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">{t.professionals.profession}</label>
+                                    <select
+                                        className="form-select"
+                                        value={formData.profession}
+                                        onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
+                                        style={{ width: '100%', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '2px solid var(--color-sand-dark)' }}
+                                    >
+                                        {Object.keys(professionIcons).map(key => (
+                                            <option key={key} value={key}>{professionIcons[key]} {t.professionals.professions[key]}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">{t.professionals.phone}</label>
+                                    <input
+                                        type="tel"
+                                        className="form-input"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        dir="ltr"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">{t.professionals.description}</label>
+                                    <textarea
+                                        className="form-input"
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                        rows={2}
+                                        style={{ resize: 'vertical' }}
+                                    />
+                                </div>
+                                <button
+                                    className="btn-send-notice"
+                                    onClick={handleAddProfessional}
+                                    disabled={!formData.name.trim() || !formData.phone.trim()}
+                                >
+                                    👷 {t.professionals.add}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Professionals List */}
+                    <div className="admin-management-card">
+                        <div className="filter-pills" style={{ marginBottom: 'var(--space-md)' }}>
+                            <button className={`filter-pill ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>
+                                {lang === 'he' ? 'הכל' : 'All'} ({professionals.length})
+                            </button>
+                            <button className={`filter-pill ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')}>
+                                {t.professionals.pending} ({professionals.filter(p => !p.isApproved).length})
+                            </button>
+                            <button className={`filter-pill ${filter === 'approved' ? 'active' : ''}`} onClick={() => setFilter('approved')}>
+                                {t.professionals.approved} ({professionals.filter(p => p.isApproved).length})
+                            </button>
+                        </div>
+
+                        {filteredPros.length === 0 ? (
+                            <div className="no-admins-message">{t.professionals.empty}</div>
+                        ) : (
+                            filteredPros.map(pro => (
+                                <div key={pro.id} className="user-card">
+                                    <div className="user-avatar" style={{ background: 'var(--color-sand)' }}>
+                                        {professionIcons[pro.profession]}
+                                    </div>
+                                    <div className="user-info">
+                                        <div className="user-name">{pro.name}</div>
+                                        <div className="user-details">
+                                            {t.professionals.professions[pro.profession]} • {pro.phone}
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
+                                        {!pro.isApproved && (
+                                            <button className="user-action-btn approve" onClick={() => handleApprove(pro.id)}>✓</button>
+                                        )}
+                                        <button className="user-action-btn reject" onClick={() => handleDelete(pro.id)}>🗑️</button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Marketplace Section for Admin
+        const MarketplaceSection = () => {
+            const { t, lang } = useLanguage();
+            const [items, setItems] = useState([]);
+            const [filter, setFilter] = useState('all');
+
+            const categoryIcons = {
+                sell: '🏷️',
+                buy: '🛒',
+                give: '🎁',
+                seek: '🔍'
+            };
+
+            const handleDelete = (id) => {
+                if (confirm(lang === 'he' ? 'למחוק מודעה?' : 'Delete listing?')) {
+                    setItems(items.filter(i => i.id !== id));
+                }
+            };
+
+            const filteredItems = filter === 'all' ? items : items.filter(i => i.category === filter);
+
+            return (
+                <div>
+                    <div className="admin-management-card">
+                        <div className="admin-section-title">{t.marketplace.title}</div>
+
+                        <div className="filter-pills" style={{ marginBottom: 'var(--space-md)' }}>
+                            <button className={`filter-pill ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>
+                                {t.marketplace.all} ({items.length})
+                            </button>
+                            {Object.keys(categoryIcons).map(cat => (
+                                <button
+                                    key={cat}
+                                    className={`filter-pill ${filter === cat ? 'active' : ''}`}
+                                    onClick={() => setFilter(cat)}
+                                >
+                                    {categoryIcons[cat]} {t.marketplace[cat]}
+                                </button>
+                            ))}
+                        </div>
+
+                        {filteredItems.length === 0 ? (
+                            <div className="no-admins-message">{t.marketplace.empty}</div>
+                        ) : (
+                            filteredItems.map(item => (
+                                <div key={item.id} className="user-card">
+                                    <div className="user-avatar" style={{ background: 'var(--color-sand)' }}>
+                                        {categoryIcons[item.category]}
+                                    </div>
+                                    <div className="user-info">
+                                        <div className="user-name">{item.title}</div>
+                                        <div className="user-details">
+                                            {item.price && `₪${item.price} • `}{t.marketplace.by} {item.userName}
+                                        </div>
+                                    </div>
+                                    <button className="user-action-btn reject" onClick={() => handleDelete(item.id)}>🗑️</button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
         // Admin verification helper
         const getConfig = () => {
             return window.APP_CONFIG || {
@@ -2180,6 +2711,9 @@
                 { id: 'users', icon: '👥', label: t.tabs.users },
                 { id: 'faults', icon: '🔧', label: t.tabs.faults },
                 { id: 'notices', icon: '📢', label: t.tabs.notices },
+                { id: 'polls', icon: '📊', label: t.tabs.polls },
+                { id: 'professionals', icon: '👷', label: t.tabs.professionals },
+                { id: 'marketplace', icon: '🛒', label: t.tabs.marketplace },
                 { id: 'admins', icon: '👑', label: t.tabs.admins }
             ];
 
@@ -2228,6 +2762,9 @@
                         {activeTab === 'users' && <UsersSection />}
                         {activeTab === 'faults' && <FaultsSection />}
                         {activeTab === 'notices' && <NoticesSection />}
+                        {activeTab === 'polls' && <PollsSection />}
+                        {activeTab === 'professionals' && <ProfessionalsSection />}
+                        {activeTab === 'marketplace' && <MarketplaceSection />}
                         {activeTab === 'admins' && <AdminsSection />}
                     </main>
 

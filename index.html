@@ -810,6 +810,10 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- Supabase Client (for authentication) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="src/supabase.js"></script>
+
     <script type="text/babel">
         const { useState, useEffect, createContext, useContext } = React;
 
@@ -1223,20 +1227,169 @@
             );
         };
 
-        // Main App
+        // Waiting for Approval Screen
+        const WaitingForApproval = () => {
+            const { t, lang } = useLanguage();
+            const config = window.APP_CONFIG || {};
+            const buildingName = lang === 'he' ? config.BUILDING_NAME : config.BUILDING_NAME_EN;
+
+            const texts = {
+                he: {
+                    title: 'ממתין לאישור',
+                    message: 'הבקשה שלך להצטרף לבניין נמצאת בבדיקה.',
+                    info: 'ועד הבית יבדוק את הפרטים שלך ויאשר את הגישה בהקדם.',
+                    contact: 'לשאלות ניתן לפנות לוועד הבית',
+                    logout: 'התנתק'
+                },
+                en: {
+                    title: 'Waiting for Approval',
+                    message: 'Your request to join the building is being reviewed.',
+                    info: 'The building committee will verify your details and approve access soon.',
+                    contact: 'For questions, please contact the building committee',
+                    logout: 'Logout'
+                }
+            };
+            const txt = texts[lang];
+
+            const handleLogout = async () => {
+                if (window.AppAuth) {
+                    await window.AppAuth.signOut();
+                }
+                window.location.href = 'auth.html';
+            };
+
+            return (
+                <div className="app-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: 'var(--space-lg)', textAlign: 'center' }}>
+                    <div style={{ fontSize: '4rem', marginBottom: 'var(--space-lg)' }}>⏳</div>
+                    <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: 'var(--space-md)', color: 'var(--color-secondary)' }}>
+                        {txt.title}
+                    </h1>
+                    <p style={{ fontSize: '1rem', color: 'var(--color-text)', marginBottom: 'var(--space-sm)', maxWidth: '300px' }}>
+                        {txt.message}
+                    </p>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-lg)', maxWidth: '300px' }}>
+                        {txt.info}
+                    </p>
+                    <div style={{ background: 'var(--color-sand)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', marginBottom: 'var(--space-lg)' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-xs)' }}>
+                            {txt.contact}
+                        </div>
+                        <div style={{ fontWeight: 600 }}>🏢 {buildingName}</div>
+                    </div>
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            background: 'var(--color-cream)',
+                            border: '2px solid var(--color-sand-dark)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: 'var(--space-sm) var(--space-lg)',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '0.875rem',
+                            color: 'var(--color-text-muted)',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        {txt.logout}
+                    </button>
+                </div>
+            );
+        };
+
+        // Auth Guard - checks if user is approved
+        const AuthGuard = ({ children }) => {
+            const [authState, setAuthState] = useState('loading'); // 'loading' | 'approved' | 'pending' | 'unauthenticated'
+            const [user, setUser] = useState(null);
+
+            useEffect(() => {
+                const checkAuth = async () => {
+                    // If Supabase is not configured, show app without auth
+                    if (!window.supabaseClient) {
+                        setAuthState('approved');
+                        return;
+                    }
+
+                    try {
+                        const currentUser = await window.AppAuth.getCurrentUser();
+                        if (!currentUser) {
+                            setAuthState('unauthenticated');
+                            return;
+                        }
+
+                        setUser(currentUser);
+                        const profile = await window.AppAuth.getUserProfile(currentUser.id);
+
+                        if (profile?.is_approved) {
+                            setAuthState('approved');
+                        } else {
+                            setAuthState('pending');
+                        }
+                    } catch (error) {
+                        console.error('Auth check error:', error);
+                        setAuthState('approved'); // Fallback to show app
+                    }
+                };
+
+                checkAuth();
+
+                // Listen for auth changes
+                if (window.AppAuth) {
+                    const unsubscribe = window.AppAuth.onAuthStateChange((event, session) => {
+                        if (event === 'SIGNED_OUT') {
+                            setAuthState('unauthenticated');
+                        } else if (event === 'SIGNED_IN' && session?.user) {
+                            checkAuth();
+                        }
+                    });
+                    return unsubscribe;
+                }
+            }, []);
+
+            if (authState === 'loading') {
+                return (
+                    <div className="app-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+                        <div style={{ textAlign: 'center' }}>
+                            <div style={{ fontSize: '2rem', marginBottom: 'var(--space-md)' }}>🏠</div>
+                            <div style={{ color: 'var(--color-text-muted)' }}>טוען...</div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (authState === 'unauthenticated') {
+                window.location.href = 'auth.html';
+                return null;
+            }
+
+            if (authState === 'pending') {
+                return <WaitingForApproval />;
+            }
+
+            return children;
+        };
+
+        // Main App Content
+        const AppContent = () => {
+            return (
+                <div className="app-container">
+                    <div className="bg-pattern" />
+                    <main className="main-content">
+                        <WelcomeHeader />
+                        <PaymentCard />
+                        <QuickActions />
+                        <RecentNotices />
+                    </main>
+                    <BottomNav />
+                </div>
+            );
+        };
+
+        // Main App with Auth
         const App = () => {
             return (
                 <LanguageProvider>
-                    <div className="app-container">
-                        <div className="bg-pattern" />
-                        <main className="main-content">
-                            <WelcomeHeader />
-                            <PaymentCard />
-                            <QuickActions />
-                            <RecentNotices />
-                        </main>
-                        <BottomNav />
-                    </div>
+                    <AuthGuard>
+                        <AppContent />
+                    </AuthGuard>
                 </LanguageProvider>
             );
         };
