@@ -644,6 +644,7 @@
                 title: 'הודעות',
                 tabs: { all: 'הכל', urgent: 'דחוף', events: 'אירועים', info: 'מידע' },
                 types: { urgent: 'דחוף', event: 'אירוע', info: 'מידע', maintenance: 'תחזוקה' },
+                empty: 'אין הודעות כרגע',
                 rsvp: {
                     title: 'האם תגיע/י?',
                     yes: 'מגיע/ה',
@@ -663,6 +664,7 @@
                 title: 'Notices',
                 tabs: { all: 'All', urgent: 'Urgent', events: 'Events', info: 'Info' },
                 types: { urgent: 'Urgent', event: 'Event', info: 'Info', maintenance: 'Maintenance' },
+                empty: 'No notices at the moment',
                 rsvp: {
                     title: 'Will you attend?',
                     yes: 'Attending',
@@ -699,85 +701,8 @@
         const useLanguage = () => useContext(LanguageContext);
 
         // Mock Data
-        const mockNotices = [
-            {
-                id: 1,
-                type: 'urgent',
-                title: { he: 'הפסקת מים מתוכננת', en: 'Planned Water Shutdown' },
-                preview: { he: 'ביום שלישי הקרוב יתבצעו עבודות תחזוקה במערכת המים.', en: 'Maintenance work on the water system will be performed this Tuesday.' },
-                content: {
-                    he: 'שכנים יקרים,\n\nביום שלישי, ה-6.2.2025, בין השעות 10:00-14:00, יתבצעו עבודות תחזוקה במערכת המים של הבניין.\n\nבמהלך העבודות לא יהיה אספקת מים לדירות.\n\nאנא הכינו מראש מים לשתייה ולשימושים בסיסיים.\n\nמתנצלים על אי הנוחות,\nועד הבית',
-                    en: 'Dear residents,\n\nOn Tuesday, February 6th, 2025, between 10:00-14:00, maintenance work will be performed on the building\'s water system.\n\nDuring the work there will be no water supply to apartments.\n\nPlease prepare drinking water and water for basic needs in advance.\n\nWe apologize for the inconvenience,\nBuilding Committee'
-                },
-                date: '2025-02-04',
-                isRead: false,
-                icon: '🚰'
-            },
-            {
-                id: 2,
-                type: 'event',
-                title: { he: 'אסיפת דיירים שנתית', en: 'Annual Residents Meeting' },
-                preview: { he: 'מוזמנים לאסיפת הדיירים השנתית. נדונו נושאים חשובים!', en: 'You are invited to the annual residents meeting. Important topics will be discussed!' },
-                content: {
-                    he: 'שכנים יקרים,\n\nאתם מוזמנים לאסיפת הדיירים השנתית.\n\nנושאים לדיון:\n• דו"ח כספי שנתי\n• תוכניות שיפוץ לשנה הקרובה\n• בחירת ועד בית חדש\n• שונות\n\nנא לאשר הגעה.\n\nבברכה,\nועד הבית',
-                    en: 'Dear residents,\n\nYou are invited to the annual residents meeting.\n\nTopics for discussion:\n• Annual financial report\n• Renovation plans for the coming year\n• Election of new building committee\n• Other matters\n\nPlease confirm attendance.\n\nBest regards,\nBuilding Committee'
-                },
-                date: '2025-02-10',
-                eventDate: '2025-02-13',
-                eventTime: '20:00',
-                eventLocation: { he: 'לובי הבניין', en: 'Building Lobby' },
-                eventDuration: { he: 'כשעה וחצי', en: 'About 1.5 hours' },
-                isRead: false,
-                icon: '📋',
-                rsvp: { yes: 18, no: 5 },
-                userRsvp: null
-            },
-            {
-                id: 3,
-                type: 'info',
-                title: { he: 'עדכון שעות ניקיון', en: 'Cleaning Hours Update' },
-                preview: { he: 'החל מהשבוע הבא הניקיון יתבצע בימים ובשעות חדשים.', en: 'Starting next week, cleaning will be done on new days and times.' },
-                content: {
-                    he: 'שכנים יקרים,\n\nברצוננו לעדכן כי החל מיום ראשון הקרוב (9.2.2025), הניקיון בבניין יתבצע בימים ובשעות הבאים:\n\n• ימי שני: 08:00-12:00 - ניקיון כללי\n• ימי רביעי: 08:00-10:00 - ניקיון חדרי מדרגות\n• ימי שישי: 07:00-09:00 - ניקיון לובי\n\nתודה על שיתוף הפעולה,\nועד הבית',
-                    en: 'Dear residents,\n\nWe would like to update you that starting this Sunday (Feb 9, 2025), cleaning in the building will be done on the following days and times:\n\n• Mondays: 08:00-12:00 - General cleaning\n• Wednesdays: 08:00-10:00 - Stairwell cleaning\n• Fridays: 07:00-09:00 - Lobby cleaning\n\nThank you for your cooperation,\nBuilding Committee'
-                },
-                date: '2025-02-03',
-                isRead: true,
-                icon: '🧹'
-            },
-            {
-                id: 4,
-                type: 'event',
-                title: { he: 'ערב טריוויה שכונתי', en: 'Neighborhood Trivia Night' },
-                preview: { he: 'בואו להכיר את השכנים בערב משחקים ופרסים!', en: 'Come meet your neighbors at a night of games and prizes!' },
-                content: {
-                    he: 'שכנים יקרים,\n\nמזמינים אתכם לערב טריוויה שכונתי!\n\nהערב יכלול:\n• משחקי טריוויה בקבוצות\n• פרסים למנצחים\n• כיבוד קל\n• הזדמנות להכיר שכנים\n\nמומלץ לבוא עם המשפחה!\n\nבברכה,\nועד הבית',
-                    en: 'Dear residents,\n\nWe invite you to a neighborhood trivia night!\n\nThe evening will include:\n• Team trivia games\n• Prizes for winners\n• Light refreshments\n• Opportunity to meet neighbors\n\nRecommended to come with family!\n\nBest regards,\nBuilding Committee'
-                },
-                date: '2025-02-01',
-                eventDate: '2025-02-20',
-                eventTime: '19:30',
-                eventLocation: { he: 'גינת הבניין', en: 'Building Garden' },
-                eventDuration: { he: 'כשעתיים', en: 'About 2 hours' },
-                isRead: true,
-                icon: '🎯',
-                rsvp: { yes: 24, no: 3 },
-                userRsvp: 'yes'
-            },
-            {
-                id: 5,
-                type: 'maintenance',
-                title: { he: 'תחזוקת מעלית', en: 'Elevator Maintenance' },
-                preview: { he: 'המעלית תעצר לתחזוקה שנתית ביום חמישי.', en: 'The elevator will stop for annual maintenance on Thursday.' },
-                content: {
-                    he: 'שכנים יקרים,\n\nביום חמישי, ה-8.2.2025, בין השעות 09:00-13:00, תתבצע תחזוקה שנתית למעלית.\n\nבמהלך העבודות המעלית תהיה מושבתת.\n\nאנא תכננו בהתאם.\n\nתודה על ההבנה,\nועד הבית',
-                    en: 'Dear residents,\n\nOn Thursday, February 8th, 2025, between 09:00-13:00, annual elevator maintenance will be performed.\n\nDuring the work the elevator will be out of service.\n\nPlease plan accordingly.\n\nThank you for your understanding,\nBuilding Committee'
-                },
-                date: '2025-02-02',
-                isRead: true,
-                icon: '🛗'
-            }
-        ];
+        // Empty notices - will be populated from database
+        const mockNotices = [];
 
         const typeIcons = {
             urgent: '⚠️',
@@ -1048,13 +973,20 @@
                     </div>
 
                     <main className="main-content">
-                        {filteredNotices.map(notice => (
-                            <NoticeCard
-                                key={notice.id}
-                                notice={notice}
-                                onClick={() => handleOpenNotice(notice)}
-                            />
-                        ))}
+                        {filteredNotices.length === 0 ? (
+                            <div style={{ textAlign: 'center', padding: 'var(--space-2xl)', color: 'var(--color-text-muted)' }}>
+                                <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>📭</div>
+                                <div>{t.empty}</div>
+                            </div>
+                        ) : (
+                            filteredNotices.map(notice => (
+                                <NoticeCard
+                                    key={notice.id}
+                                    notice={notice}
+                                    onClick={() => handleOpenNotice(notice)}
+                                />
+                            ))
+                        )}
                     </main>
 
                     <BottomNav />

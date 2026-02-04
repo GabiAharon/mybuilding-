@@ -1376,7 +1376,6 @@
             const [fullName, setFullName] = useState('');
             const [phone, setPhone] = useState('');
             const [apartment, setApartment] = useState('');
-            const [building, setBuilding] = useState('');
             const [status, setStatus] = useState('owner');
             const [errors, setErrors] = useState({});
 
@@ -1393,9 +1392,6 @@
                 if (!apartment) {
                     newErrors.apartment = t.register.step2.errors.apartment;
                 }
-                if (!building) {
-                    newErrors.building = t.register.step2.errors.building;
-                }
 
                 setErrors(newErrors);
 
@@ -1405,7 +1401,6 @@
                         fullName,
                         phone,
                         apartment,
-                        building,
                         status
                     });
                 }
@@ -1458,34 +1453,17 @@
                                 {errors.phone && <span className="form-error">{errors.phone}</span>}
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-                                <div className="form-group">
-                                    <label className="form-label">{t.register.step2.apartment}</label>
-                                    <input
-                                        type="text"
-                                        className={`form-input ${errors.apartment ? 'error' : ''}`}
-                                        placeholder={t.register.step2.apartmentPlaceholder}
-                                        value={apartment}
-                                        onChange={(e) => setApartment(e.target.value)}
-                                        dir="ltr"
-                                    />
-                                    {errors.apartment && <span className="form-error">{errors.apartment}</span>}
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="form-label">{t.register.step2.building}</label>
-                                    <select
-                                        className={`form-input form-select ${errors.building ? 'error' : ''}`}
-                                        value={building}
-                                        onChange={(e) => setBuilding(e.target.value)}
-                                    >
-                                        <option value="">{t.register.step2.buildingPlaceholder}</option>
-                                        {t.buildings.map((b, i) => (
-                                            <option key={i} value={b}>{b}</option>
-                                        ))}
-                                    </select>
-                                    {errors.building && <span className="form-error">{errors.building}</span>}
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">{t.register.step2.apartment}</label>
+                                <input
+                                    type="text"
+                                    className={`form-input ${errors.apartment ? 'error' : ''}`}
+                                    placeholder={t.register.step2.apartmentPlaceholder}
+                                    value={apartment}
+                                    onChange={(e) => setApartment(e.target.value)}
+                                    dir="ltr"
+                                />
+                                {errors.apartment && <span className="form-error">{errors.apartment}</span>}
                             </div>
 
                             <div className="form-group">

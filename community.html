@@ -781,7 +781,8 @@
                     deadline: 'עד',
                     votes: 'הצבעות',
                     voted: 'הצבעת',
-                    vote: 'הצבע'
+                    vote: 'הצבע',
+                    empty: 'אין הצבעות פעילות כרגע'
                 },
                 pros: {
                     all: 'הכל',
@@ -793,6 +794,7 @@
                     recommended: 'מומלץ ע"י דירה',
                     call: 'התקשר',
                     whatsapp: 'וואטסאפ',
+                    empty: 'אין בעלי מקצוע מומלצים עדיין',
                     addPro: 'הוסף איש מקצוע',
                     proName: 'שם',
                     proPhone: 'טלפון',
@@ -809,7 +811,8 @@
                     itemDesc: 'תיאור',
                     itemType: 'סוג',
                     itemPrice: 'מחיר',
-                    submit: 'פרסם'
+                    submit: 'פרסם',
+                    empty: 'אין פריטים כרגע'
                 },
                 nav: { home: 'בית', faults: 'תקלות', notices: 'הודעות', community: 'קהילה', profile: 'פרופיל' }
             },
@@ -826,7 +829,8 @@
                     deadline: 'Until',
                     votes: 'votes',
                     voted: 'Voted',
-                    vote: 'Vote'
+                    vote: 'Vote',
+                    empty: 'No active polls at the moment'
                 },
                 pros: {
                     all: 'All',
@@ -838,6 +842,7 @@
                     recommended: 'Recommended by Apt',
                     call: 'Call',
                     whatsapp: 'WhatsApp',
+                    empty: 'No recommended professionals yet',
                     addPro: 'Add Professional',
                     proName: 'Name',
                     proPhone: 'Phone',
@@ -854,7 +859,8 @@
                     itemDesc: 'Description',
                     itemType: 'Type',
                     itemPrice: 'Price',
-                    submit: 'Post'
+                    submit: 'Post',
+                    empty: 'No items at the moment'
                 },
                 nav: { home: 'Home', faults: 'Issues', notices: 'Notices', community: 'Community', profile: 'Profile' }
             }
@@ -877,125 +883,10 @@
         };
         const useLanguage = () => useContext(LanguageContext);
 
-        // Mock Data
-        const mockPolls = [
-            {
-                id: 1,
-                question: { he: 'באיזה צבע לצבוע את הלובי?', en: 'What color should we paint the lobby?' },
-                options: [
-                    { id: 'a', text: { he: 'לבן שמנת', en: 'Cream White' }, votes: 12 },
-                    { id: 'b', text: { he: 'אפור בהיר', en: 'Light Gray' }, votes: 8 },
-                    { id: 'c', text: { he: 'בז\'', en: 'Beige' }, votes: 5 }
-                ],
-                deadline: '2025-02-15',
-                isActive: true,
-                userVote: null
-            },
-            {
-                id: 2,
-                question: { he: 'האם לאשר תקציב שיפוץ המעלית?', en: 'Approve elevator renovation budget?' },
-                options: [
-                    { id: 'a', text: { he: 'כן, לאשר', en: 'Yes, approve' }, votes: 22 },
-                    { id: 'b', text: { he: 'לא, לדחות', en: 'No, reject' }, votes: 3 }
-                ],
-                deadline: '2025-02-08',
-                isActive: true,
-                userVote: 'a'
-            },
-            {
-                id: 3,
-                question: { he: 'באיזה יום לקיים את אסיפת הדיירים?', en: 'Which day for the residents meeting?' },
-                options: [
-                    { id: 'a', text: { he: 'יום שלישי', en: 'Tuesday' }, votes: 15 },
-                    { id: 'b', text: { he: 'יום חמישי', en: 'Thursday' }, votes: 18 }
-                ],
-                deadline: '2025-01-30',
-                isActive: false,
-                userVote: 'b'
-            }
-        ];
-
-        const mockPros = [
-            {
-                id: 1,
-                name: { he: 'יוסי האינסטלטור', en: 'Yossi the Plumber' },
-                category: 'plumber',
-                phone: '050-1234567',
-                rating: 4.8,
-                reviews: 12,
-                recommendedBy: '4',
-                icon: '🔧'
-            },
-            {
-                id: 2,
-                name: { he: 'משה חשמלאי', en: 'Moshe Electrician' },
-                category: 'electrician',
-                phone: '052-9876543',
-                rating: 4.9,
-                reviews: 8,
-                recommendedBy: '7',
-                icon: '⚡'
-            },
-            {
-                id: 3,
-                name: { he: 'שירות ניקיון "נקי"', en: 'Clean Service' },
-                category: 'cleaner',
-                phone: '03-5551234',
-                rating: 4.5,
-                reviews: 15,
-                recommendedBy: '12',
-                icon: '🧹'
-            },
-            {
-                id: 4,
-                name: { he: 'רונית - בייביסיטר', en: 'Ronit - Babysitter' },
-                category: 'babysitter',
-                phone: '054-3332211',
-                rating: 5.0,
-                reviews: 6,
-                recommendedBy: '9',
-                icon: '👶'
-            }
-        ];
-
-        const mockMarketItems = [
-            {
-                id: 1,
-                title: { he: 'ספה תלת מושבית', en: '3-Seat Sofa' },
-                type: 'free',
-                price: 0,
-                apartment: '5',
-                image: 'https://picsum.photos/200?random=10',
-                date: '2025-02-03'
-            },
-            {
-                id: 2,
-                title: { he: 'אופניים לילדים', en: 'Kids Bike' },
-                type: 'sale',
-                price: 150,
-                apartment: '8',
-                image: 'https://picsum.photos/200?random=11',
-                date: '2025-02-02'
-            },
-            {
-                id: 3,
-                title: { he: 'צבע קיר - נשאר משיפוץ', en: 'Wall Paint - Leftover' },
-                type: 'free',
-                price: 0,
-                apartment: '3',
-                image: 'https://picsum.photos/200?random=12',
-                date: '2025-02-01'
-            },
-            {
-                id: 4,
-                title: { he: 'שולחן כתיבה', en: 'Writing Desk' },
-                type: 'sale',
-                price: 200,
-                apartment: '11',
-                image: 'https://picsum.photos/200?random=13',
-                date: '2025-01-30'
-            }
-        ];
+        // Empty data - will be populated from database
+        const mockPolls = [];
+        const mockPros = [];
+        const mockMarketItems = [];
 
         // Components
         const VotingSection = () => {
