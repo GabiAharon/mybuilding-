@@ -1,8 +1,10 @@
 {
   "rewrites": [
-    {
-      "source": "/((?!api|assets|.*\\..*).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/auth", "destination": "/auth.html" },
+    { "source": "/community", "destination": "/community.html" },
+    { "source": "/faults", "destination": "/faults.html" },
+    { "source": "/notices", "destination": "/notices.html" },
+    { "source": "/profile", "destination": "/profile.html" }
   ]
 }
