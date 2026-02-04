@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#D4785C">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>MyBuilding - קהילה</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #D4785C;
+            --color-primary-dark: #B8614A;
+            --color-primary-light: #E8A18C;
+            --color-secondary: #2D5A4A;
+            --color-secondary-light: #3D7A64;
+            --color-cream: #FFF9F5;
+            --color-sand: #F5E6D8;
+            --color-sand-dark: #E8D4C4;
+            --color-text: #3D2E2A;
+            --color-text-muted: #8B7355;
+            --color-text-light: #B8A090;
+            --color-success: #4A9D7C;
+            --color-success-bg: #E8F5F0;
+            --color-danger: #C75D5D;
+            --color-danger-bg: #FCF0F0;
+            --color-warning: #D4A85C;
+            --color-warning-bg: #FDF8F0;
+            --color-info: #5C8ED4;
+            --color-info-bg: #F0F5FC;
+            --color-vote: #7C5CD4;
+            --color-vote-bg: #F3F0FC;
+            --color-market: #5CB8D4;
+            --color-market-bg: #F0FAFC;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --radius-full: 9999px;
+            --shadow-sm: 0 2px 8px rgba(61, 46, 42, 0.06);
+            --shadow-md: 0 4px 16px rgba(61, 46, 42, 0.08);
+            --shadow-lg: 0 8px 32px rgba(61, 46, 42, 0.12);
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Rubik', sans-serif;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: var(--font-body);
+            background: var(--color-cream);
+            color: var(--color-text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            line-height: 1.5;
+        }
+        [dir="rtl"] { text-align: right; }
+        #root { min-height: 100vh; min-height: 100dvh; }
+
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--color-cream);
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+        }
+
+        /* Header */
+        .page-header {
+            position: sticky;
+            top: 0;
+            background: var(--color-cream);
+            padding: var(--space-lg);
+            padding-top: calc(var(--safe-top) + var(--space-lg));
+            z-index: 50;
+            border-bottom: 1px solid var(--color-sand);
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Section Tabs */
+        .section-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--color-cream);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .section-tabs::-webkit-scrollbar { display: none; }
+
+        .section-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-md);
+            background: white;
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+
+        .section-tab:hover {
+            border-color: var(--color-sand-dark);
+        }
+
+        .section-tab.active {
+            border-color: var(--color-primary);
+            background: rgba(212, 120, 92, 0.05);
+        }
+
+        .section-tab-icon {
+            font-size: 1.5rem;
+        }
+
+        .section-tab-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+        }
+
+        .section-tab.active .section-tab-label {
+            color: var(--color-primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--space-md) var(--space-lg);
+            padding-bottom: calc(80px + var(--safe-bottom) + var(--space-lg));
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        /* ==================== VOTING SECTION ==================== */
+        .poll-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+            box-shadow: var(--shadow-sm);
+            animation: slideUp 0.5s var(--ease-out-expo) forwards;
+            opacity: 0;
+        }
+
+        .poll-card:nth-child(1) { animation-delay: 0.05s; }
+        .poll-card:nth-child(2) { animation-delay: 0.1s; }
+        .poll-card:nth-child(3) { animation-delay: 0.15s; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .poll-status {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .poll-status.active {
+            background: var(--color-vote-bg);
+            color: var(--color-vote);
+        }
+
+        .poll-status.ended {
+            background: var(--color-sand);
+            color: var(--color-text-muted);
+        }
+
+        .poll-question {
+            font-family: var(--font-display);
+            font-size: 1.0625rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        .poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .poll-option {
+            position: relative;
+            padding: var(--space-md);
+            border: 2px solid var(--color-sand-dark);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            overflow: hidden;
+        }
+
+        .poll-option:hover:not(.voted):not(.disabled) {
+            border-color: var(--color-vote);
+        }
+
+        .poll-option.selected {
+            border-color: var(--color-vote);
+            background: var(--color-vote-bg);
+        }
+
+        .poll-option.voted {
+            cursor: default;
+        }
+
+        .poll-option.disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .poll-option-progress {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--color-vote-bg);
+            transition: width 0.5s var(--ease-out-expo);
+            z-index: 0;
+        }
+
+        [dir="ltr"] .poll-option-progress {
+            right: auto;
+            left: 0;
+        }
+
+        .poll-option-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .poll-option-text {
+            font-weight: 500;
+        }
+
+        .poll-option-votes {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-vote);
+        }
+
+        .poll-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+
+        .poll-deadline {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .poll-total {
+            font-weight: 600;
+            color: var(--color-text-muted);
+        }
+
+        /* ==================== TRUSTED PROS SECTION ==================== */
+        .pro-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: var(--space-md);
+            animation: slideUp 0.5s var(--ease-out-expo) forwards;
+            opacity: 0;
+        }
+
+        .pro-card:nth-child(1) { animation-delay: 0.05s; }
+        .pro-card:nth-child(2) { animation-delay: 0.1s; }
+        .pro-card:nth-child(3) { animation-delay: 0.15s; }
+        .pro-card:nth-child(4) { animation-delay: 0.2s; }
+
+        .pro-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            background: var(--color-sand);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .pro-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .pro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-xs);
+        }
+
+        .pro-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        .pro-rating {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 0.75rem;
+            color: var(--color-warning);
+        }
+
+        .pro-category {
+            font-size: 0.8125rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .pro-recommendation {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.75rem;
+            color: var(--color-success);
+            background: var(--color-success-bg);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            width: fit-content;
+        }
+
+        .pro-contact {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+
+        .pro-contact-btn {
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            border: none;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .pro-contact-btn.phone {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .pro-contact-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .pro-contact-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            overflow-x: auto;
+            padding-bottom: var(--space-sm);
+            scrollbar-width: none;
+        }
+        .category-filter::-webkit-scrollbar { display: none; }
+
+        .filter-chip {
+            padding: var(--space-sm) var(--space-md);
+            background: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font-body);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .filter-chip.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* ==================== MARKETPLACE SECTION ==================== */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+
+        .market-card {
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            animation: slideUp 0.5s var(--ease-out-expo) forwards;
+            opacity: 0;
+        }
+
+        .market-card:nth-child(1) { animation-delay: 0.05s; }
+        .market-card:nth-child(2) { animation-delay: 0.1s; }
+        .market-card:nth-child(3) { animation-delay: 0.15s; }
+        .market-card:nth-child(4) { animation-delay: 0.2s; }
+
+        .market-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .market-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background: var(--color-sand);
+        }
+
+        .market-content {
+            padding: var(--space-md);
+        }
+
+        .market-type {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-xs);
+            display: inline-block;
+        }
+
+        .market-type.free {
+            background: var(--color-success-bg);
+            color: var(--color-success);
+        }
+
+        .market-type.sale {
+            background: var(--color-market-bg);
+            color: var(--color-market);
+        }
+
+        .market-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: var(--space-xs);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .market-price {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .market-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            margin-top: var(--space-sm);
+        }
+
+        /* Add Button */
+        .add-btn {
+            position: fixed;
+            bottom: calc(80px + var(--safe-bottom) + var(--space-md));
+            left: var(--space-lg);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg), 0 4px 20px rgba(212, 120, 92, 0.4);
+            transition: all 0.3s var(--ease-out-expo);
+            z-index: 40;
+        }
+
+        [dir="ltr"] .add-btn {
+            left: auto;
+            right: var(--space-lg);
+        }
+
+        .add-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .add-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(61, 46, 42, 0.5);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-cream);
+            width: 100%;
+            max-width: 430px;
+            max-height: 90vh;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s var(--ease-out-expo);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--color-sand);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--color-sand);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+        }
+
+        .modal-body {
+            padding: var(--space-lg);
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Form Elements */
+        .form-group { margin-bottom: var(--space-lg); }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: var(--space-md);
+            border: 2px solid var(--color-sand-dark);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s var(--ease-out-expo);
+            outline: none;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(212, 120, 92, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%238B7355' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left var(--space-md) center;
+            padding-left: calc(var(--space-md) + 28px);
+        }
+
+        [dir="ltr"] .form-select {
+            background-position: right var(--space-md) center;
+            padding-left: var(--space-md);
+            padding-right: calc(var(--space-md) + 28px);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-top: 1px solid var(--color-sand);
+            padding: var(--space-sm) var(--space-md);
+            padding-bottom: calc(var(--safe-bottom) + var(--space-sm));
+            display: flex;
+            justify-content: space-around;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 24px;
+            height: 3px;
+            background: var(--color-primary);
+            border-radius: var(--radius-full);
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+
+        .nav-item.active::before { transform: translateX(-50%) scaleX(1); }
+
+        .nav-icon {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+        }
+
+        .nav-item.active .nav-icon { color: var(--color-primary); }
+
+        .nav-label {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--color-text-light);
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, createContext, useContext } = React;
+
+        // Translations
+        const translations = {
+            he: {
+                title: 'קהילה',
+                sections: {
+                    voting: 'הצבעות',
+                    pros: 'אנשי מקצוע',
+                    market: 'תן וקבל'
+                },
+                voting: {
+                    active: 'פעיל',
+                    ended: 'הסתיים',
+                    deadline: 'עד',
+                    votes: 'הצבעות',
+                    voted: 'הצבעת',
+                    vote: 'הצבע'
+                },
+                pros: {
+                    all: 'הכל',
+                    plumber: 'אינסטלטור',
+                    electrician: 'חשמלאי',
+                    cleaner: 'ניקיון',
+                    handyman: 'הנדימן',
+                    babysitter: 'בייביסיטר',
+                    recommended: 'מומלץ ע"י דירה',
+                    call: 'התקשר',
+                    whatsapp: 'וואטסאפ',
+                    addPro: 'הוסף איש מקצוע',
+                    proName: 'שם',
+                    proPhone: 'טלפון',
+                    proCategory: 'תחום',
+                    proNote: 'הערה',
+                    submit: 'הוסף'
+                },
+                market: {
+                    free: 'חינם',
+                    sale: 'למכירה',
+                    apartment: 'דירה',
+                    addItem: 'פרסם פריט',
+                    itemTitle: 'כותרת',
+                    itemDesc: 'תיאור',
+                    itemType: 'סוג',
+                    itemPrice: 'מחיר',
+                    submit: 'פרסם'
+                },
+                nav: { home: 'בית', faults: 'תקלות', notices: 'הודעות', community: 'קהילה', profile: 'פרופיל' }
+            },
+            en: {
+                title: 'Community',
+                sections: {
+                    voting: 'Voting',
+                    pros: 'Trusted Pros',
+                    market: 'Give & Get'
+                },
+                voting: {
+                    active: 'Active',
+                    ended: 'Ended',
+                    deadline: 'Until',
+                    votes: 'votes',
+                    voted: 'Voted',
+                    vote: 'Vote'
+                },
+                pros: {
+                    all: 'All',
+                    plumber: 'Plumber',
+                    electrician: 'Electrician',
+                    cleaner: 'Cleaner',
+                    handyman: 'Handyman',
+                    babysitter: 'Babysitter',
+                    recommended: 'Recommended by Apt',
+                    call: 'Call',
+                    whatsapp: 'WhatsApp',
+                    addPro: 'Add Professional',
+                    proName: 'Name',
+                    proPhone: 'Phone',
+                    proCategory: 'Category',
+                    proNote: 'Note',
+                    submit: 'Add'
+                },
+                market: {
+                    free: 'Free',
+                    sale: 'For Sale',
+                    apartment: 'Apt',
+                    addItem: 'Post Item',
+                    itemTitle: 'Title',
+                    itemDesc: 'Description',
+                    itemType: 'Type',
+                    itemPrice: 'Price',
+                    submit: 'Post'
+                },
+                nav: { home: 'Home', faults: 'Issues', notices: 'Notices', community: 'Community', profile: 'Profile' }
+            }
+        };
+
+        const LanguageContext = createContext();
+        const LanguageProvider = ({ children }) => {
+            const [lang, setLang] = useState('he');
+            const t = translations[lang];
+            const isRTL = lang === 'he';
+            useEffect(() => {
+                document.documentElement.lang = lang;
+                document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            }, [lang, isRTL]);
+            return (
+                <LanguageContext.Provider value={{ lang, t, isRTL }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+        const useLanguage = () => useContext(LanguageContext);
+
+        // Mock Data
+        const mockPolls = [
+            {
+                id: 1,
+                question: { he: 'באיזה צבע לצבוע את הלובי?', en: 'What color should we paint the lobby?' },
+                options: [
+                    { id: 'a', text: { he: 'לבן שמנת', en: 'Cream White' }, votes: 12 },
+                    { id: 'b', text: { he: 'אפור בהיר', en: 'Light Gray' }, votes: 8 },
+                    { id: 'c', text: { he: 'בז\'', en: 'Beige' }, votes: 5 }
+                ],
+                deadline: '2025-02-15',
+                isActive: true,
+                userVote: null
+            },
+            {
+                id: 2,
+                question: { he: 'האם לאשר תקציב שיפוץ המעלית?', en: 'Approve elevator renovation budget?' },
+                options: [
+                    { id: 'a', text: { he: 'כן, לאשר', en: 'Yes, approve' }, votes: 22 },
+                    { id: 'b', text: { he: 'לא, לדחות', en: 'No, reject' }, votes: 3 }
+                ],
+                deadline: '2025-02-08',
+                isActive: true,
+                userVote: 'a'
+            },
+            {
+                id: 3,
+                question: { he: 'באיזה יום לקיים את אסיפת הדיירים?', en: 'Which day for the residents meeting?' },
+                options: [
+                    { id: 'a', text: { he: 'יום שלישי', en: 'Tuesday' }, votes: 15 },
+                    { id: 'b', text: { he: 'יום חמישי', en: 'Thursday' }, votes: 18 }
+                ],
+                deadline: '2025-01-30',
+                isActive: false,
+                userVote: 'b'
+            }
+        ];
+
+        const mockPros = [
+            {
+                id: 1,
+                name: { he: 'יוסי האינסטלטור', en: 'Yossi the Plumber' },
+                category: 'plumber',
+                phone: '050-1234567',
+                rating: 4.8,
+                reviews: 12,
+                recommendedBy: '4',
+                icon: '🔧'
+            },
+            {
+                id: 2,
+                name: { he: 'משה חשמלאי', en: 'Moshe Electrician' },
+                category: 'electrician',
+                phone: '052-9876543',
+                rating: 4.9,
+                reviews: 8,
+                recommendedBy: '7',
+                icon: '⚡'
+            },
+            {
+                id: 3,
+                name: { he: 'שירות ניקיון "נקי"', en: 'Clean Service' },
+                category: 'cleaner',
+                phone: '03-5551234',
+                rating: 4.5,
+                reviews: 15,
+                recommendedBy: '12',
+                icon: '🧹'
+            },
+            {
+                id: 4,
+                name: { he: 'רונית - בייביסיטר', en: 'Ronit - Babysitter' },
+                category: 'babysitter',
+                phone: '054-3332211',
+                rating: 5.0,
+                reviews: 6,
+                recommendedBy: '9',
+                icon: '👶'
+            }
+        ];
+
+        const mockMarketItems = [
+            {
+                id: 1,
+                title: { he: 'ספה תלת מושבית', en: '3-Seat Sofa' },
+                type: 'free',
+                price: 0,
+                apartment: '5',
+                image: 'https://picsum.photos/200?random=10',
+                date: '2025-02-03'
+            },
+            {
+                id: 2,
+                title: { he: 'אופניים לילדים', en: 'Kids Bike' },
+                type: 'sale',
+                price: 150,
+                apartment: '8',
+                image: 'https://picsum.photos/200?random=11',
+                date: '2025-02-02'
+            },
+            {
+                id: 3,
+                title: { he: 'צבע קיר - נשאר משיפוץ', en: 'Wall Paint - Leftover' },
+                type: 'free',
+                price: 0,
+                apartment: '3',
+                image: 'https://picsum.photos/200?random=12',
+                date: '2025-02-01'
+            },
+            {
+                id: 4,
+                title: { he: 'שולחן כתיבה', en: 'Writing Desk' },
+                type: 'sale',
+                price: 200,
+                apartment: '11',
+                image: 'https://picsum.photos/200?random=13',
+                date: '2025-01-30'
+            }
+        ];
+
+        // Components
+        const VotingSection = () => {
+            const { t, lang } = useLanguage();
+            const [polls, setPolls] = useState(mockPolls);
+
+            const handleVote = (pollId, optionId) => {
+                setPolls(prev => prev.map(poll => {
+                    if (poll.id === pollId && !poll.userVote && poll.isActive) {
+                        return {
+                            ...poll,
+                            userVote: optionId,
+                            options: poll.options.map(opt =>
+                                opt.id === optionId ? { ...opt, votes: opt.votes + 1 } : opt
+                            )
+                        };
+                    }
+                    return poll;
+                }));
+            };
+
+            const getTotalVotes = (options) => options.reduce((sum, opt) => sum + opt.votes, 0);
+
+            return (
+                <div>
+                    {polls.map(poll => {
+                        const total = getTotalVotes(poll.options);
+                        const hasVoted = !!poll.userVote;
+
+                        return (
+                            <div key={poll.id} className="poll-card">
+                                <span className={`poll-status ${poll.isActive ? 'active' : 'ended'}`}>
+                                    {poll.isActive ? `🗳️ ${t.voting.active}` : `✓ ${t.voting.ended}`}
+                                </span>
+                                <h3 className="poll-question">{poll.question[lang]}</h3>
+                                <div className="poll-options">
+                                    {poll.options.map(option => {
+                                        const percentage = total > 0 ? Math.round((option.votes / total) * 100) : 0;
+                                        const isSelected = poll.userVote === option.id;
+
+                                        return (
+                                            <div
+                                                key={option.id}
+                                                className={`poll-option ${isSelected ? 'selected' : ''} ${hasVoted ? 'voted' : ''} ${!poll.isActive ? 'disabled' : ''}`}
+                                                onClick={() => handleVote(poll.id, option.id)}
+                                            >
+                                                {hasVoted && (
+                                                    <div
+                                                        className="poll-option-progress"
+                                                        style={{ width: `${percentage}%` }}
+                                                    />
+                                                )}
+                                                <div className="poll-option-content">
+                                                    <span className="poll-option-text">
+                                                        {isSelected && '✓ '}{option.text[lang]}
+                                                    </span>
+                                                    {hasVoted && (
+                                                        <span className="poll-option-votes">{percentage}%</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <div className="poll-meta">
+                                    <span className="poll-deadline">
+                                        ⏰ {t.voting.deadline} {poll.deadline}
+                                    </span>
+                                    <span className="poll-total">{total} {t.voting.votes}</span>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        };
+
+        const ProsSection = ({ onAdd }) => {
+            const { t, lang } = useLanguage();
+            const [filter, setFilter] = useState('all');
+
+            const categories = ['all', 'plumber', 'electrician', 'cleaner', 'handyman', 'babysitter'];
+            const filteredPros = filter === 'all' ? mockPros : mockPros.filter(p => p.category === filter);
+
+            return (
+                <div>
+                    <div className="category-filter">
+                        {categories.map(cat => (
+                            <button
+                                key={cat}
+                                className={`filter-chip ${filter === cat ? 'active' : ''}`}
+                                onClick={() => setFilter(cat)}
+                            >
+                                {t.pros[cat]}
+                            </button>
+                        ))}
+                    </div>
+
+                    {filteredPros.map(pro => (
+                        <div key={pro.id} className="pro-card">
+                            <div className="pro-avatar">{pro.icon}</div>
+                            <div className="pro-info">
+                                <div className="pro-header">
+                                    <span className="pro-name">{pro.name[lang]}</span>
+                                    <span className="pro-rating">
+                                        ⭐ {pro.rating} ({pro.reviews})
+                                    </span>
+                                </div>
+                                <div className="pro-category">{t.pros[pro.category]}</div>
+                                <div className="pro-recommendation">
+                                    👍 {t.pros.recommended} {pro.recommendedBy}
+                                </div>
+                                <div className="pro-contact">
+                                    <button className="pro-contact-btn phone">
+                                        📞 {t.pros.call}
+                                    </button>
+                                    <button className="pro-contact-btn whatsapp">
+                                        💬 {t.pros.whatsapp}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const MarketSection = ({ onAdd }) => {
+            const { t, lang } = useLanguage();
+
+            return (
+                <div className="market-grid">
+                    {mockMarketItems.map(item => (
+                        <div key={item.id} className="market-card">
+                            <img src={item.image} alt="" className="market-image" />
+                            <div className="market-content">
+                                <span className={`market-type ${item.type}`}>
+                                    {t.market[item.type]}
+                                </span>
+                                <h3 className="market-title">{item.title[lang]}</h3>
+                                {item.type === 'sale' && (
+                                    <div className="market-price">₪{item.price}</div>
+                                )}
+                                <div className="market-meta">
+                                    📍 {t.market.apartment} {item.apartment}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const AddModal = ({ type, isOpen, onClose }) => {
+            const { t, lang } = useLanguage();
+
+            const title = type === 'pros' ? t.pros.addPro : t.market.addItem;
+
+            return (
+                <div className={`modal-overlay ${isOpen ? 'active' : ''}`} onClick={onClose}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">{title}</h2>
+                            <button className="modal-close" onClick={onClose}>✕</button>
+                        </div>
+                        <div className="modal-body">
+                            {type === 'pros' ? (
+                                <>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.pros.proName}</label>
+                                        <input type="text" className="form-input" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.pros.proPhone}</label>
+                                        <input type="tel" className="form-input" dir="ltr" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.pros.proCategory}</label>
+                                        <select className="form-select">
+                                            <option value="plumber">{t.pros.plumber}</option>
+                                            <option value="electrician">{t.pros.electrician}</option>
+                                            <option value="cleaner">{t.pros.cleaner}</option>
+                                            <option value="handyman">{t.pros.handyman}</option>
+                                            <option value="babysitter">{t.pros.babysitter}</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.pros.proNote}</label>
+                                        <textarea className="form-textarea" />
+                                    </div>
+                                    <button className="btn-submit">{t.pros.submit}</button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.market.itemTitle}</label>
+                                        <input type="text" className="form-input" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.market.itemDesc}</label>
+                                        <textarea className="form-textarea" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.market.itemType}</label>
+                                        <select className="form-select">
+                                            <option value="free">{t.market.free}</option>
+                                            <option value="sale">{t.market.sale}</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">{t.market.itemPrice}</label>
+                                        <input type="number" className="form-input" dir="ltr" />
+                                    </div>
+                                    <button className="btn-submit">{t.market.submit}</button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const BottomNav = () => {
+            const { t } = useLanguage();
+            const navItems = [
+                { id: 'home', icon: '🏠', label: t.nav.home, href: 'index.html' },
+                { id: 'faults', icon: '🔧', label: t.nav.faults, href: 'faults.html' },
+                { id: 'notices', icon: '🔔', label: t.nav.notices, href: 'notices.html', badge: true },
+                { id: 'community', icon: '👥', label: t.nav.community, href: 'community.html', active: true },
+                { id: 'profile', icon: '👤', label: t.nav.profile, href: 'profile.html' }
+            ];
+
+            return (
+                <nav className="bottom-nav">
+                    {navItems.map(item => (
+                        <a
+                            key={item.id}
+                            href={item.href}
+                            className={`nav-item ${item.active ? 'active' : ''}`}
+                        >
+                            <span className="nav-icon">{item.icon}</span>
+                            <span className="nav-label">{item.label}</span>
+                            {item.badge && !item.active && <span className="nav-badge" />}
+                        </a>
+                    ))}
+                </nav>
+            );
+        };
+
+        const App = () => {
+            const { t } = useLanguage();
+            const [activeSection, setActiveSection] = useState('voting');
+            const [showAddModal, setShowAddModal] = useState(false);
+
+            const sections = [
+                { id: 'voting', icon: '🗳️', label: t.sections.voting },
+                { id: 'pros', icon: '⭐', label: t.sections.pros },
+                { id: 'market', icon: '♻️', label: t.sections.market }
+            ];
+
+            const showAddButton = activeSection === 'pros' || activeSection === 'market';
+
+            return (
+                <div className="app-container">
+                    <header className="page-header">
+                        <h1 className="page-title">{t.title}</h1>
+                    </header>
+
+                    <div className="section-tabs">
+                        {sections.map(section => (
+                            <button
+                                key={section.id}
+                                className={`section-tab ${activeSection === section.id ? 'active' : ''}`}
+                                onClick={() => setActiveSection(section.id)}
+                            >
+                                <span className="section-tab-icon">{section.icon}</span>
+                                <span className="section-tab-label">{section.label}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    <main className="main-content">
+                        {activeSection === 'voting' && <VotingSection />}
+                        {activeSection === 'pros' && <ProsSection />}
+                        {activeSection === 'market' && <MarketSection />}
+                    </main>
+
+                    {showAddButton && (
+                        <button className="add-btn" onClick={() => setShowAddModal(true)}>
+                            ➕
+                        </button>
+                    )}
+
+                    <BottomNav />
+
+                    <AddModal
+                        type={activeSection}
+                        isOpen={showAddModal}
+                        onClose={() => setShowAddModal(false)}
+                    />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            <LanguageProvider>
+                <App />
+            </LanguageProvider>
+        );
+    </script>
+</body>
+</html>

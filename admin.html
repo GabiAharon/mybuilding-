@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#2D5A4A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>MyBuilding - ניהול</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #2D5A4A;
+            --color-primary-dark: #1E3D32;
+            --color-primary-light: #3D7A64;
+            --color-accent: #D4785C;
+            --color-accent-light: #E8A18C;
+            --color-cream: #FFF9F5;
+            --color-sand: #F5E6D8;
+            --color-sand-dark: #E8D4C4;
+            --color-text: #3D2E2A;
+            --color-text-muted: #8B7355;
+            --color-text-light: #B8A090;
+            --color-success: #4A9D7C;
+            --color-success-bg: #E8F5F0;
+            --color-danger: #C75D5D;
+            --color-danger-bg: #FCF0F0;
+            --color-warning: #D4A85C;
+            --color-warning-bg: #FDF8F0;
+            --color-info: #5C8ED4;
+            --color-info-bg: #F0F5FC;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --radius-full: 9999px;
+            --shadow-sm: 0 2px 8px rgba(61, 46, 42, 0.06);
+            --shadow-md: 0 4px 16px rgba(61, 46, 42, 0.08);
+            --shadow-lg: 0 8px 32px rgba(61, 46, 42, 0.12);
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Rubik', sans-serif;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: var(--font-body);
+            background: #F5F7F6;
+            color: var(--color-text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            line-height: 1.5;
+        }
+        [dir="rtl"] { text-align: right; }
+        #root { min-height: 100vh; min-height: 100dvh; }
+
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: #F5F7F6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            padding: var(--space-lg);
+            padding-top: calc(var(--safe-top) + var(--space-lg));
+            color: white;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .admin-badge {
+            background: rgba(255,255,255,0.2);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .building-info {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            margin-top: calc(var(--space-lg) * -1);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-value.positive { color: var(--color-success); }
+        .stat-value.negative { color: var(--color-danger); }
+        .stat-value.neutral { color: var(--color-primary); }
+
+        .stat-label {
+            font-size: 0.6875rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Tabs */
+        .section-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .section-tabs::-webkit-scrollbar { display: none; }
+
+        .section-tab {
+            padding: var(--space-sm) var(--space-md);
+            background: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font-body);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .section-tab.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .tab-badge {
+            background: var(--color-danger);
+            color: white;
+            font-size: 0.625rem;
+            padding: 2px 6px;
+            border-radius: var(--radius-full);
+        }
+
+        .section-tab.active .tab-badge {
+            background: white;
+            color: var(--color-primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 var(--space-lg);
+            padding-bottom: calc(80px + var(--safe-bottom) + var(--space-lg));
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* ==================== FINANCIAL DASHBOARD ==================== */
+        .finance-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .finance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .finance-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .finance-period {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            background: var(--color-sand);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+        }
+
+        .balance-display {
+            text-align: center;
+            padding: var(--space-lg) 0;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(135deg, var(--color-success-bg) 0%, #D4F0E7 100%);
+            border-radius: var(--radius-md);
+        }
+
+        .balance-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-xs);
+        }
+
+        .balance-amount {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-success);
+        }
+
+        .finance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--color-sand);
+        }
+
+        .finance-row:last-child { border-bottom: none; }
+
+        .finance-row-label {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.875rem;
+        }
+
+        .finance-row-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .finance-row-icon.income { background: var(--color-success-bg); }
+        .finance-row-icon.expense { background: var(--color-danger-bg); }
+
+        .finance-row-amount {
+            font-weight: 600;
+        }
+
+        .finance-row-amount.income { color: var(--color-success); }
+        .finance-row-amount.expense { color: var(--color-danger); }
+
+        /* Simple Bar Chart */
+        .chart-container {
+            margin-top: var(--space-lg);
+        }
+
+        .chart-bar-group {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 120px;
+            padding: var(--space-md) 0;
+        }
+
+        .chart-bar {
+            width: 40px;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            transition: height 0.5s var(--ease-out-expo);
+            position: relative;
+        }
+
+        .chart-bar.income { background: var(--color-success); }
+        .chart-bar.expense { background: var(--color-danger); }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.625rem;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.income { background: var(--color-success); }
+        .legend-dot.expense { background: var(--color-danger); }
+
+        /* ==================== DEBTORS SECTION ==================== */
+        .debtor-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            animation: slideUp 0.5s var(--ease-out-expo) forwards;
+            opacity: 0;
+        }
+
+        .debtor-card:nth-child(1) { animation-delay: 0.05s; }
+        .debtor-card:nth-child(2) { animation-delay: 0.1s; }
+        .debtor-card:nth-child(3) { animation-delay: 0.15s; }
+        .debtor-card:nth-child(4) { animation-delay: 0.2s; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .debtor-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--color-danger-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .debtor-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .debtor-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            margin-bottom: 2px;
+        }
+
+        .debtor-apartment {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .debtor-amount {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-danger);
+            margin-bottom: var(--space-xs);
+            text-align: left;
+        }
+
+        [dir="rtl"] .debtor-amount { text-align: right; }
+
+        .reminder-btn {
+            padding: var(--space-xs) var(--space-md);
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font-body);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .reminder-btn:hover {
+            transform: scale(1.05);
+            background: var(--color-primary);
+        }
+
+        .reminder-btn.sent {
+            background: var(--color-success);
+            cursor: default;
+        }
+
+        /* ==================== EXPENSES SECTION ==================== */
+        .expense-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            box-shadow: var(--shadow-sm);
+            animation: slideUp 0.5s var(--ease-out-expo) forwards;
+            opacity: 0;
+        }
+
+        .expense-card:nth-child(1) { animation-delay: 0.05s; }
+        .expense-card:nth-child(2) { animation-delay: 0.1s; }
+        .expense-card:nth-child(3) { animation-delay: 0.15s; }
+
+        .expense-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-sm);
+        }
+
+        .expense-category {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .expense-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--color-sand);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .expense-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        .expense-date {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+
+        .expense-amount {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .expense-receipt {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.75rem;
+            color: var(--color-info);
+            cursor: pointer;
+        }
+
+        .add-expense-btn {
+            width: 100%;
+            padding: var(--space-md);
+            background: white;
+            border: 2px dashed var(--color-sand-dark);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+
+        .add-expense-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: rgba(45, 90, 74, 0.02);
+        }
+
+        /* ==================== USERS SECTION ==================== */
+        .user-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            animation: slideUp 0.5s var(--ease-out-expo) forwards;
+            opacity: 0;
+        }
+
+        .user-card:nth-child(1) { animation-delay: 0.05s; }
+        .user-card:nth-child(2) { animation-delay: 0.1s; }
+        .user-card:nth-child(3) { animation-delay: 0.15s; }
+        .user-card:nth-child(4) { animation-delay: 0.2s; }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--color-sand);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .user-avatar.pending { background: var(--color-warning-bg); }
+
+        .user-info { flex: 1; min-width: 0; }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            margin-bottom: 2px;
+        }
+
+        .user-details {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .user-status {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+        }
+
+        .user-status.pending {
+            background: var(--color-warning-bg);
+            color: var(--color-warning);
+        }
+
+        .user-status.active {
+            background: var(--color-success-bg);
+            color: var(--color-success);
+        }
+
+        .user-status.admin {
+            background: var(--color-info-bg);
+            color: var(--color-info);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        .user-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .user-action-btn.approve {
+            background: var(--color-success-bg);
+            color: var(--color-success);
+        }
+
+        .user-action-btn.reject {
+            background: var(--color-danger-bg);
+            color: var(--color-danger);
+        }
+
+        .user-action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Filter Pills */
+        .filter-pills {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .filter-pill {
+            padding: var(--space-xs) var(--space-md);
+            background: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .filter-pill.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(61, 46, 42, 0.5);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-cream);
+            width: 100%;
+            max-width: 430px;
+            max-height: 90vh;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s var(--ease-out-expo);
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--color-sand);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--color-sand);
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+        }
+
+        .modal-body {
+            padding: var(--space-lg);
+            overflow-y: auto;
+        }
+
+        /* Form */
+        .form-group { margin-bottom: var(--space-lg); }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: var(--space-md);
+            border: 2px solid var(--color-sand-dark);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            background: white;
+            outline: none;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--color-primary);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--color-sand-dark);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--color-primary);
+        }
+
+        .file-upload-icon { font-size: 2rem; margin-bottom: var(--space-sm); }
+        .file-upload-text { font-size: 0.875rem; color: var(--color-text-muted); }
+
+        .btn-submit {
+            width: 100%;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-top: 1px solid var(--color-sand);
+            padding: var(--space-sm) var(--space-md);
+            padding-bottom: calc(var(--safe-bottom) + var(--space-sm));
+            display: flex;
+            justify-content: space-around;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 24px;
+            height: 3px;
+            background: var(--color-primary);
+            border-radius: var(--radius-full);
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+
+        .nav-item.active::before { transform: translateX(-50%) scaleX(1); }
+
+        .nav-icon {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+        }
+
+        .nav-item.active .nav-icon { color: var(--color-primary); }
+
+        .nav-label {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--color-text-light);
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, createContext, useContext } = React;
+
+        // Translations
+        const translations = {
+            he: {
+                title: 'לוח בקרה',
+                admin: 'מנהל',
+                building: 'מגדלי הים',
+                stats: { balance: 'יתרה', debtors: 'חייבים', apartments: 'דירות' },
+                tabs: { finance: 'כספים', debtors: 'חייבים', expenses: 'הוצאות', users: 'משתמשים' },
+                finance: {
+                    title: 'סיכום חודשי',
+                    period: 'פברואר 2025',
+                    balance: 'יתרת קופה',
+                    income: 'הכנסות',
+                    expenses: 'הוצאות',
+                    legend: { income: 'הכנסות', expenses: 'הוצאות' },
+                    months: ['ינו', 'פבר', 'מרץ', 'אפר']
+                },
+                debtors: {
+                    sendReminder: 'שלח תזכורת',
+                    sent: 'נשלח',
+                    apartment: 'דירה',
+                    debt: 'חוב'
+                },
+                expenses: {
+                    add: 'הוסף הוצאה',
+                    receipt: 'קבלה מצורפת',
+                    categories: {
+                        cleaning: 'ניקיון',
+                        electricity: 'חשמל',
+                        water: 'מים',
+                        maintenance: 'תחזוקה',
+                        gardening: 'גינון',
+                        other: 'אחר'
+                    },
+                    form: {
+                        title: 'הוצאה חדשה',
+                        category: 'קטגוריה',
+                        amount: 'סכום',
+                        description: 'תיאור',
+                        receipt: 'קבלה',
+                        uploadReceipt: 'העלה קבלה',
+                        submit: 'הוסף הוצאה'
+                    }
+                },
+                users: {
+                    filter: { all: 'הכל', pending: 'ממתינים', active: 'פעילים' },
+                    status: { pending: 'ממתין', active: 'פעיל', admin: 'מנהל' },
+                    apartment: 'דירה',
+                    approve: 'אשר',
+                    reject: 'דחה'
+                },
+                nav: { dashboard: 'בקרה', residents: 'דיירים', settings: 'הגדרות', exit: 'יציאה' }
+            },
+            en: {
+                title: 'Dashboard',
+                admin: 'Admin',
+                building: 'Sea Towers',
+                stats: { balance: 'Balance', debtors: 'Debtors', apartments: 'Apartments' },
+                tabs: { finance: 'Finance', debtors: 'Debtors', expenses: 'Expenses', users: 'Users' },
+                finance: {
+                    title: 'Monthly Summary',
+                    period: 'February 2025',
+                    balance: 'Current Balance',
+                    income: 'Income',
+                    expenses: 'Expenses',
+                    legend: { income: 'Income', expenses: 'Expenses' },
+                    months: ['Jan', 'Feb', 'Mar', 'Apr']
+                },
+                debtors: {
+                    sendReminder: 'Send Reminder',
+                    sent: 'Sent',
+                    apartment: 'Apt',
+                    debt: 'Debt'
+                },
+                expenses: {
+                    add: 'Add Expense',
+                    receipt: 'Receipt attached',
+                    categories: {
+                        cleaning: 'Cleaning',
+                        electricity: 'Electricity',
+                        water: 'Water',
+                        maintenance: 'Maintenance',
+                        gardening: 'Gardening',
+                        other: 'Other'
+                    },
+                    form: {
+                        title: 'New Expense',
+                        category: 'Category',
+                        amount: 'Amount',
+                        description: 'Description',
+                        receipt: 'Receipt',
+                        uploadReceipt: 'Upload Receipt',
+                        submit: 'Add Expense'
+                    }
+                },
+                users: {
+                    filter: { all: 'All', pending: 'Pending', active: 'Active' },
+                    status: { pending: 'Pending', active: 'Active', admin: 'Admin' },
+                    apartment: 'Apt',
+                    approve: 'Approve',
+                    reject: 'Reject'
+                },
+                nav: { dashboard: 'Dashboard', residents: 'Residents', settings: 'Settings', exit: 'Exit' }
+            }
+        };
+
+        const LanguageContext = createContext();
+        const LanguageProvider = ({ children }) => {
+            const [lang, setLang] = useState('he');
+            const t = translations[lang];
+            const isRTL = lang === 'he';
+            useEffect(() => {
+                document.documentElement.lang = lang;
+                document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            }, [lang, isRTL]);
+            return (
+                <LanguageContext.Provider value={{ lang, t, isRTL }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+        const useLanguage = () => useContext(LanguageContext);
+
+        // Mock Data
+        const mockDebtors = [
+            { id: 1, name: { he: 'יוסי כהן', en: 'Yossi Cohen' }, apartment: '3', amount: 1200, reminded: false },
+            { id: 2, name: { he: 'משה לוי', en: 'Moshe Levi' }, apartment: '7', amount: 2400, reminded: true },
+            { id: 3, name: { he: 'דוד ישראלי', en: 'David Israeli' }, apartment: '11', amount: 800, reminded: false },
+            { id: 4, name: { he: 'רחל אברהם', en: 'Rachel Abraham' }, apartment: '15', amount: 400, reminded: false }
+        ];
+
+        const mockExpenses = [
+            { id: 1, category: 'cleaning', name: { he: 'ניקיון חודשי', en: 'Monthly Cleaning' }, amount: 2500, date: '2025-02-01', hasReceipt: true },
+            { id: 2, category: 'electricity', name: { he: 'חשמל חדר מדרגות', en: 'Stairwell Electricity' }, amount: 850, date: '2025-02-03', hasReceipt: true },
+            { id: 3, category: 'maintenance', name: { he: 'תיקון אינטרקום', en: 'Intercom Repair' }, amount: 450, date: '2025-01-28', hasReceipt: true }
+        ];
+
+        const mockUsers = [
+            { id: 1, name: { he: 'שרה גולן', en: 'Sarah Golan' }, apartment: '18', status: 'pending', type: 'owner' },
+            { id: 2, name: { he: 'אבי מזרחי', en: 'Avi Mizrahi' }, apartment: '2', status: 'active', type: 'owner' },
+            { id: 3, name: { he: 'מיכל דוד', en: 'Michal David' }, apartment: '9', status: 'admin', type: 'owner' },
+            { id: 4, name: { he: 'יעקב פרץ', en: 'Yaakov Peretz' }, apartment: '14', status: 'pending', type: 'tenant' }
+        ];
+
+        const categoryIcons = {
+            cleaning: '🧹',
+            electricity: '⚡',
+            water: '💧',
+            maintenance: '🔧',
+            gardening: '🌿',
+            other: '📋'
+        };
+
+        // Components
+        const FinanceSection = () => {
+            const { t } = useLanguage();
+            const chartData = [
+                { month: t.finance.months[0], income: 85, expense: 60 },
+                { month: t.finance.months[1], income: 100, expense: 70 },
+                { month: t.finance.months[2], income: 90, expense: 55 },
+                { month: t.finance.months[3], income: 95, expense: 65 }
+            ];
+
+            return (
+                <div className="finance-card">
+                    <div className="finance-header">
+                        <h3 className="finance-title">{t.finance.title}</h3>
+                        <span className="finance-period">{t.finance.period}</span>
+                    </div>
+
+                    <div className="balance-display">
+                        <div className="balance-label">{t.finance.balance}</div>
+                        <div className="balance-amount">₪47,850</div>
+                    </div>
+
+                    <div className="finance-row">
+                        <div className="finance-row-label">
+                            <div className="finance-row-icon income">📈</div>
+                            <span>{t.finance.income}</span>
+                        </div>
+                        <span className="finance-row-amount income">+₪14,400</span>
+                    </div>
+
+                    <div className="finance-row">
+                        <div className="finance-row-label">
+                            <div className="finance-row-icon expense">📉</div>
+                            <span>{t.finance.expenses}</span>
+                        </div>
+                        <span className="finance-row-amount expense">-₪3,800</span>
+                    </div>
+
+                    <div className="chart-container">
+                        <div className="chart-bar-group">
+                            {chartData.map((data, i) => (
+                                <React.Fragment key={i}>
+                                    <div className="chart-bar income" style={{ height: `${data.income}%` }}>
+                                        <span className="chart-bar-label">{data.month}</span>
+                                    </div>
+                                    <div className="chart-bar expense" style={{ height: `${data.expense}%` }} />
+                                </React.Fragment>
+                            ))}
+                        </div>
+                        <div className="chart-legend">
+                            <div className="legend-item">
+                                <div className="legend-dot income"></div>
+                                <span>{t.finance.legend.income}</span>
+                            </div>
+                            <div className="legend-item">
+                                <div className="legend-dot expense"></div>
+                                <span>{t.finance.legend.expenses}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const DebtorsSection = () => {
+            const { t, lang } = useLanguage();
+            const [debtors, setDebtors] = useState(mockDebtors);
+
+            const handleRemind = (id) => {
+                setDebtors(prev => prev.map(d =>
+                    d.id === id ? { ...d, reminded: true } : d
+                ));
+            };
+
+            return (
+                <div>
+                    {debtors.map(debtor => (
+                        <div key={debtor.id} className="debtor-card">
+                            <div className="debtor-avatar">🏠</div>
+                            <div className="debtor-info">
+                                <div className="debtor-name">{debtor.name[lang]}</div>
+                                <div className="debtor-apartment">{t.debtors.apartment} {debtor.apartment}</div>
+                            </div>
+                            <div>
+                                <div className="debtor-amount">₪{debtor.amount.toLocaleString()}</div>
+                                <button
+                                    className={`reminder-btn ${debtor.reminded ? 'sent' : ''}`}
+                                    onClick={() => !debtor.reminded && handleRemind(debtor.id)}
+                                >
+                                    {debtor.reminded ? `✓ ${t.debtors.sent}` : `📩 ${t.debtors.sendReminder}`}
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const ExpensesSection = ({ onAdd }) => {
+            const { t, lang } = useLanguage();
+
+            return (
+                <div>
+                    {mockExpenses.map(expense => (
+                        <div key={expense.id} className="expense-card">
+                            <div className="expense-header">
+                                <div className="expense-category">
+                                    <div className="expense-icon">{categoryIcons[expense.category]}</div>
+                                    <div>
+                                        <div className="expense-name">{expense.name[lang]}</div>
+                                        <div className="expense-date">{expense.date}</div>
+                                    </div>
+                                </div>
+                                <div className="expense-amount">₪{expense.amount.toLocaleString()}</div>
+                            </div>
+                            {expense.hasReceipt && (
+                                <div className="expense-receipt">📎 {t.expenses.receipt}</div>
+                            )}
+                        </div>
+                    ))}
+                    <button className="add-expense-btn" onClick={onAdd}>
+                        ➕ {t.expenses.add}
+                    </button>
+                </div>
+            );
+        };
+
+        const UsersSection = () => {
+            const { t, lang } = useLanguage();
+            const [filter, setFilter] = useState('all');
+            const [users, setUsers] = useState(mockUsers);
+
+            const filteredUsers = filter === 'all'
+                ? users
+                : users.filter(u => u.status === filter);
+
+            const pendingCount = users.filter(u => u.status === 'pending').length;
+
+            const handleApprove = (id) => {
+                setUsers(prev => prev.map(u =>
+                    u.id === id ? { ...u, status: 'active' } : u
+                ));
+            };
+
+            const handleReject = (id) => {
+                setUsers(prev => prev.filter(u => u.id !== id));
+            };
+
+            return (
+                <div>
+                    <div className="filter-pills">
+                        <button
+                            className={`filter-pill ${filter === 'all' ? 'active' : ''}`}
+                            onClick={() => setFilter('all')}
+                        >
+                            {t.users.filter.all}
+                        </button>
+                        <button
+                            className={`filter-pill ${filter === 'pending' ? 'active' : ''}`}
+                            onClick={() => setFilter('pending')}
+                        >
+                            {t.users.filter.pending} ({pendingCount})
+                        </button>
+                        <button
+                            className={`filter-pill ${filter === 'active' ? 'active' : ''}`}
+                            onClick={() => setFilter('active')}
+                        >
+                            {t.users.filter.active}
+                        </button>
+                    </div>
+
+                    {filteredUsers.map(user => (
+                        <div key={user.id} className="user-card">
+                            <div className={`user-avatar ${user.status === 'pending' ? 'pending' : ''}`}>
+                                {user.status === 'pending' ? '⏳' : '👤'}
+                            </div>
+                            <div className="user-info">
+                                <div className="user-name">{user.name[lang]}</div>
+                                <div className="user-details">
+                                    {t.users.apartment} {user.apartment} • {user.type === 'owner' ? '🏠' : '🔑'}
+                                </div>
+                            </div>
+                            {user.status === 'pending' ? (
+                                <div className="user-actions">
+                                    <button
+                                        className="user-action-btn approve"
+                                        onClick={() => handleApprove(user.id)}
+                                        title={t.users.approve}
+                                    >
+                                        ✓
+                                    </button>
+                                    <button
+                                        className="user-action-btn reject"
+                                        onClick={() => handleReject(user.id)}
+                                        title={t.users.reject}
+                                    >
+                                        ✗
+                                    </button>
+                                </div>
+                            ) : (
+                                <span className={`user-status ${user.status}`}>
+                                    {t.users.status[user.status]}
+                                </span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const AddExpenseModal = ({ isOpen, onClose }) => {
+            const { t } = useLanguage();
+
+            return (
+                <div className={`modal-overlay ${isOpen ? 'active' : ''}`} onClick={onClose}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">{t.expenses.form.title}</h2>
+                            <button className="modal-close" onClick={onClose}>✕</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-group">
+                                <label className="form-label">{t.expenses.form.category}</label>
+                                <select className="form-select">
+                                    {Object.entries(t.expenses.categories).map(([key, label]) => (
+                                        <option key={key} value={key}>{categoryIcons[key]} {label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">{t.expenses.form.amount}</label>
+                                <input type="number" className="form-input" placeholder="₪" dir="ltr" />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">{t.expenses.form.description}</label>
+                                <input type="text" className="form-input" />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">{t.expenses.form.receipt}</label>
+                                <div className="file-upload">
+                                    <div className="file-upload-icon">📷</div>
+                                    <div className="file-upload-text">{t.expenses.form.uploadReceipt}</div>
+                                </div>
+                            </div>
+                            <button className="btn-submit">{t.expenses.form.submit}</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const BottomNav = () => {
+            const { t } = useLanguage();
+            const navItems = [
+                { id: 'dashboard', icon: '📊', label: t.nav.dashboard, active: true },
+                { id: 'residents', icon: '🏠', label: t.nav.residents, href: 'index.html' },
+                { id: 'settings', icon: '⚙️', label: t.nav.settings },
+                { id: 'exit', icon: '🚪', label: t.nav.exit, href: 'index.html' }
+            ];
+
+            return (
+                <nav className="bottom-nav">
+                    {navItems.map(item => (
+                        <a
+                            key={item.id}
+                            href={item.href || '#'}
+                            className={`nav-item ${item.active ? 'active' : ''}`}
+                        >
+                            <span className="nav-icon">{item.icon}</span>
+                            <span className="nav-label">{item.label}</span>
+                        </a>
+                    ))}
+                </nav>
+            );
+        };
+
+        const App = () => {
+            const { t } = useLanguage();
+            const [activeTab, setActiveTab] = useState('finance');
+            const [showExpenseModal, setShowExpenseModal] = useState(false);
+
+            const tabs = [
+                { id: 'finance', icon: '💰', label: t.tabs.finance },
+                { id: 'debtors', icon: '📋', label: t.tabs.debtors, badge: 4 },
+                { id: 'expenses', icon: '🧾', label: t.tabs.expenses },
+                { id: 'users', icon: '👥', label: t.tabs.users, badge: 2 }
+            ];
+
+            return (
+                <div className="app-container">
+                    <header className="page-header">
+                        <div className="header-top">
+                            <h1 className="page-title">{t.title}</h1>
+                            <span className="admin-badge">👑 {t.admin}</span>
+                        </div>
+                        <div className="building-info">🏢 {t.building}</div>
+                    </header>
+
+                    <div className="stats-row">
+                        <div className="stat-card">
+                            <div className="stat-value positive">₪47.8K</div>
+                            <div className="stat-label">{t.stats.balance}</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-value negative">4</div>
+                            <div className="stat-label">{t.stats.debtors}</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-value neutral">24</div>
+                            <div className="stat-label">{t.stats.apartments}</div>
+                        </div>
+                    </div>
+
+                    <div className="section-tabs">
+                        {tabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                className={`section-tab ${activeTab === tab.id ? 'active' : ''}`}
+                                onClick={() => setActiveTab(tab.id)}
+                            >
+                                {tab.icon} {tab.label}
+                                {tab.badge && <span className="tab-badge">{tab.badge}</span>}
+                            </button>
+                        ))}
+                    </div>
+
+                    <main className="main-content">
+                        {activeTab === 'finance' && <FinanceSection />}
+                        {activeTab === 'debtors' && <DebtorsSection />}
+                        {activeTab === 'expenses' && <ExpensesSection onAdd={() => setShowExpenseModal(true)} />}
+                        {activeTab === 'users' && <UsersSection />}
+                    </main>
+
+                    <BottomNav />
+
+                    <AddExpenseModal
+                        isOpen={showExpenseModal}
+                        onClose={() => setShowExpenseModal(false)}
+                    />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            <LanguageProvider>
+                <App />
+            </LanguageProvider>
+        );
+    </script>
+</body>
+</html>

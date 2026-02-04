@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#D4785C">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>MyBuilding - הודעות</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #D4785C;
+            --color-primary-dark: #B8614A;
+            --color-primary-light: #E8A18C;
+            --color-secondary: #2D5A4A;
+            --color-secondary-light: #3D7A64;
+            --color-cream: #FFF9F5;
+            --color-sand: #F5E6D8;
+            --color-sand-dark: #E8D4C4;
+            --color-text: #3D2E2A;
+            --color-text-muted: #8B7355;
+            --color-text-light: #B8A090;
+            --color-success: #4A9D7C;
+            --color-success-bg: #E8F5F0;
+            --color-danger: #C75D5D;
+            --color-danger-bg: #FCF0F0;
+            --color-warning: #D4A85C;
+            --color-warning-bg: #FDF8F0;
+            --color-info: #5C8ED4;
+            --color-info-bg: #F0F5FC;
+            --color-event: #7C5CD4;
+            --color-event-bg: #F3F0FC;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --radius-full: 9999px;
+            --shadow-sm: 0 2px 8px rgba(61, 46, 42, 0.06);
+            --shadow-md: 0 4px 16px rgba(61, 46, 42, 0.08);
+            --shadow-lg: 0 8px 32px rgba(61, 46, 42, 0.12);
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Rubik', sans-serif;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: var(--font-body);
+            background: var(--color-cream);
+            color: var(--color-text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            line-height: 1.5;
+        }
+        [dir="rtl"] { text-align: right; }
+        #root { min-height: 100vh; min-height: 100dvh; }
+
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--color-cream);
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+        }
+
+        /* Header */
+        .page-header {
+            position: sticky;
+            top: 0;
+            background: var(--color-cream);
+            padding: var(--space-lg);
+            padding-top: calc(var(--safe-top) + var(--space-lg));
+            z-index: 50;
+            border-bottom: 1px solid var(--color-sand);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .unread-badge {
+            background: var(--color-danger);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            margin-right: var(--space-sm);
+        }
+
+        [dir="ltr"] .unread-badge {
+            margin-right: 0;
+            margin-left: var(--space-sm);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--color-cream);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            background: white;
+            border-radius: var(--radius-full);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .tab.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--space-md) var(--space-lg);
+            padding-bottom: calc(80px + var(--safe-bottom) + var(--space-lg));
+        }
+
+        /* Notice Card */
+        .notice-card {
+            background: white;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-md);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            animation: slideUp 0.5s var(--ease-out-expo) forwards;
+            opacity: 0;
+        }
+
+        .notice-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .notice-card:nth-child(1) { animation-delay: 0.05s; }
+        .notice-card:nth-child(2) { animation-delay: 0.1s; }
+        .notice-card:nth-child(3) { animation-delay: 0.15s; }
+        .notice-card:nth-child(4) { animation-delay: 0.2s; }
+        .notice-card:nth-child(5) { animation-delay: 0.25s; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notice-card.unread {
+            border-right: 4px solid var(--color-primary);
+        }
+
+        [dir="ltr"] .notice-card.unread {
+            border-right: none;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .notice-header {
+            padding: var(--space-md);
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .notice-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .notice-icon.urgent { background: var(--color-danger-bg); }
+        .notice-icon.event { background: var(--color-event-bg); }
+        .notice-icon.info { background: var(--color-sand); }
+        .notice-icon.maintenance { background: var(--color-warning-bg); }
+
+        .notice-content { flex: 1; min-width: 0; }
+
+        .notice-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xs);
+        }
+
+        .notice-type {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .notice-type.urgent { background: var(--color-danger-bg); color: var(--color-danger); }
+        .notice-type.event { background: var(--color-event-bg); color: var(--color-event); }
+        .notice-type.info { background: var(--color-sand); color: var(--color-text-muted); }
+        .notice-type.maintenance { background: var(--color-warning-bg); color: var(--color-warning); }
+
+        .notice-date {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+
+        .notice-title {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            margin-bottom: var(--space-xs);
+            color: var(--color-text);
+        }
+
+        .notice-preview {
+            font-size: 0.8125rem;
+            color: var(--color-text-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Event Card Special */
+        .event-footer {
+            background: var(--color-event-bg);
+            padding: var(--space-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-date-time {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .event-date {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--color-event);
+        }
+
+        .event-time {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .event-rsvp {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .rsvp-count {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .rsvp-avatars {
+            display: flex;
+        }
+
+        .rsvp-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--color-primary-light);
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: white;
+            margin-right: -8px;
+        }
+
+        [dir="ltr"] .rsvp-avatar {
+            margin-right: 0;
+            margin-left: -8px;
+        }
+
+        .rsvp-avatar:first-child { margin: 0; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(61, 46, 42, 0.5);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-cream);
+            width: 100%;
+            max-width: 430px;
+            max-height: 90vh;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s var(--ease-out-expo);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--color-sand);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--color-sand);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover { background: var(--color-sand-dark); }
+
+        .modal-body {
+            padding: var(--space-lg);
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Notice Detail */
+        .notice-detail-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .notice-detail-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .notice-detail-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .notice-detail-content {
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: var(--color-text);
+            margin-bottom: var(--space-lg);
+        }
+
+        /* Event Detail */
+        .event-info-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .event-info-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) 0;
+        }
+
+        .event-info-row:not(:last-child) {
+            border-bottom: 1px solid var(--color-sand);
+        }
+
+        .event-info-icon {
+            font-size: 1.25rem;
+        }
+
+        .event-info-label {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+
+        .event-info-value {
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        /* RSVP Buttons */
+        .rsvp-section {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .rsvp-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        .rsvp-buttons {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .rsvp-btn {
+            flex: 1;
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-sand-dark);
+            background: white;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .rsvp-btn:hover {
+            border-color: var(--color-primary-light);
+        }
+
+        .rsvp-btn.yes {
+            border-color: var(--color-success);
+            background: var(--color-success-bg);
+            color: var(--color-success);
+        }
+
+        .rsvp-btn.yes.selected {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .rsvp-btn.no {
+            border-color: var(--color-danger);
+            background: var(--color-danger-bg);
+            color: var(--color-danger);
+        }
+
+        .rsvp-btn.no.selected {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        .rsvp-btn-icon {
+            font-size: 1.5rem;
+        }
+
+        .rsvp-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin-top: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--color-sand);
+        }
+
+        .rsvp-stat {
+            text-align: center;
+        }
+
+        .rsvp-stat-value {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .rsvp-stat-value.yes { color: var(--color-success); }
+        .rsvp-stat-value.no { color: var(--color-danger); }
+
+        .rsvp-stat-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-top: 1px solid var(--color-sand);
+            padding: var(--space-sm) var(--space-md);
+            padding-bottom: calc(var(--safe-bottom) + var(--space-sm));
+            display: flex;
+            justify-content: space-around;
+            z-index: 50;
+            box-shadow: 0 -4px 20px rgba(61, 46, 42, 0.06);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 24px;
+            height: 3px;
+            background: var(--color-primary);
+            border-radius: var(--radius-full);
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+
+        .nav-item.active::before { transform: translateX(-50%) scaleX(1); }
+
+        .nav-icon {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .nav-item.active .nav-icon { color: var(--color-primary); }
+
+        .nav-label {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--color-text-light);
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: 4px;
+            right: 12px;
+            width: 8px;
+            height: 8px;
+            background: var(--color-danger);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, createContext, useContext } = React;
+
+        // Translations
+        const translations = {
+            he: {
+                title: 'הודעות',
+                tabs: { all: 'הכל', urgent: 'דחוף', events: 'אירועים', info: 'מידע' },
+                types: { urgent: 'דחוף', event: 'אירוע', info: 'מידע', maintenance: 'תחזוקה' },
+                rsvp: {
+                    title: 'האם תגיע/י?',
+                    yes: 'מגיע/ה',
+                    no: 'לא מגיע/ה',
+                    attending: 'מגיעים',
+                    notAttending: 'לא מגיעים',
+                    responded: 'השבת לאירוע'
+                },
+                event: {
+                    when: 'מתי',
+                    where: 'איפה',
+                    duration: 'משך'
+                },
+                nav: { home: 'בית', faults: 'תקלות', notices: 'הודעות', community: 'קהילה', profile: 'פרופיל' }
+            },
+            en: {
+                title: 'Notices',
+                tabs: { all: 'All', urgent: 'Urgent', events: 'Events', info: 'Info' },
+                types: { urgent: 'Urgent', event: 'Event', info: 'Info', maintenance: 'Maintenance' },
+                rsvp: {
+                    title: 'Will you attend?',
+                    yes: 'Attending',
+                    no: 'Not Attending',
+                    attending: 'Attending',
+                    notAttending: 'Not Attending',
+                    responded: 'You responded'
+                },
+                event: {
+                    when: 'When',
+                    where: 'Where',
+                    duration: 'Duration'
+                },
+                nav: { home: 'Home', faults: 'Issues', notices: 'Notices', community: 'Community', profile: 'Profile' }
+            }
+        };
+
+        // Language Context
+        const LanguageContext = createContext();
+        const LanguageProvider = ({ children }) => {
+            const [lang, setLang] = useState('he');
+            const t = translations[lang];
+            const isRTL = lang === 'he';
+            useEffect(() => {
+                document.documentElement.lang = lang;
+                document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            }, [lang, isRTL]);
+            return (
+                <LanguageContext.Provider value={{ lang, t, isRTL }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+        const useLanguage = () => useContext(LanguageContext);
+
+        // Mock Data
+        const mockNotices = [
+            {
+                id: 1,
+                type: 'urgent',
+                title: { he: 'הפסקת מים מתוכננת', en: 'Planned Water Shutdown' },
+                preview: { he: 'ביום שלישי הקרוב יתבצעו עבודות תחזוקה במערכת המים.', en: 'Maintenance work on the water system will be performed this Tuesday.' },
+                content: {
+                    he: 'שכנים יקרים,\n\nביום שלישי, ה-6.2.2025, בין השעות 10:00-14:00, יתבצעו עבודות תחזוקה במערכת המים של הבניין.\n\nבמהלך העבודות לא יהיה אספקת מים לדירות.\n\nאנא הכינו מראש מים לשתייה ולשימושים בסיסיים.\n\nמתנצלים על אי הנוחות,\nועד הבית',
+                    en: 'Dear residents,\n\nOn Tuesday, February 6th, 2025, between 10:00-14:00, maintenance work will be performed on the building\'s water system.\n\nDuring the work there will be no water supply to apartments.\n\nPlease prepare drinking water and water for basic needs in advance.\n\nWe apologize for the inconvenience,\nBuilding Committee'
+                },
+                date: '2025-02-04',
+                isRead: false,
+                icon: '🚰'
+            },
+            {
+                id: 2,
+                type: 'event',
+                title: { he: 'אסיפת דיירים שנתית', en: 'Annual Residents Meeting' },
+                preview: { he: 'מוזמנים לאסיפת הדיירים השנתית. נדונו נושאים חשובים!', en: 'You are invited to the annual residents meeting. Important topics will be discussed!' },
+                content: {
+                    he: 'שכנים יקרים,\n\nאתם מוזמנים לאסיפת הדיירים השנתית.\n\nנושאים לדיון:\n• דו"ח כספי שנתי\n• תוכניות שיפוץ לשנה הקרובה\n• בחירת ועד בית חדש\n• שונות\n\nנא לאשר הגעה.\n\nבברכה,\nועד הבית',
+                    en: 'Dear residents,\n\nYou are invited to the annual residents meeting.\n\nTopics for discussion:\n• Annual financial report\n• Renovation plans for the coming year\n• Election of new building committee\n• Other matters\n\nPlease confirm attendance.\n\nBest regards,\nBuilding Committee'
+                },
+                date: '2025-02-10',
+                eventDate: '2025-02-13',
+                eventTime: '20:00',
+                eventLocation: { he: 'לובי הבניין', en: 'Building Lobby' },
+                eventDuration: { he: 'כשעה וחצי', en: 'About 1.5 hours' },
+                isRead: false,
+                icon: '📋',
+                rsvp: { yes: 18, no: 5 },
+                userRsvp: null
+            },
+            {
+                id: 3,
+                type: 'info',
+                title: { he: 'עדכון שעות ניקיון', en: 'Cleaning Hours Update' },
+                preview: { he: 'החל מהשבוע הבא הניקיון יתבצע בימים ובשעות חדשים.', en: 'Starting next week, cleaning will be done on new days and times.' },
+                content: {
+                    he: 'שכנים יקרים,\n\nברצוננו לעדכן כי החל מיום ראשון הקרוב (9.2.2025), הניקיון בבניין יתבצע בימים ובשעות הבאים:\n\n• ימי שני: 08:00-12:00 - ניקיון כללי\n• ימי רביעי: 08:00-10:00 - ניקיון חדרי מדרגות\n• ימי שישי: 07:00-09:00 - ניקיון לובי\n\nתודה על שיתוף הפעולה,\nועד הבית',
+                    en: 'Dear residents,\n\nWe would like to update you that starting this Sunday (Feb 9, 2025), cleaning in the building will be done on the following days and times:\n\n• Mondays: 08:00-12:00 - General cleaning\n• Wednesdays: 08:00-10:00 - Stairwell cleaning\n• Fridays: 07:00-09:00 - Lobby cleaning\n\nThank you for your cooperation,\nBuilding Committee'
+                },
+                date: '2025-02-03',
+                isRead: true,
+                icon: '🧹'
+            },
+            {
+                id: 4,
+                type: 'event',
+                title: { he: 'ערב טריוויה שכונתי', en: 'Neighborhood Trivia Night' },
+                preview: { he: 'בואו להכיר את השכנים בערב משחקים ופרסים!', en: 'Come meet your neighbors at a night of games and prizes!' },
+                content: {
+                    he: 'שכנים יקרים,\n\nמזמינים אתכם לערב טריוויה שכונתי!\n\nהערב יכלול:\n• משחקי טריוויה בקבוצות\n• פרסים למנצחים\n• כיבוד קל\n• הזדמנות להכיר שכנים\n\nמומלץ לבוא עם המשפחה!\n\nבברכה,\nועד הבית',
+                    en: 'Dear residents,\n\nWe invite you to a neighborhood trivia night!\n\nThe evening will include:\n• Team trivia games\n• Prizes for winners\n• Light refreshments\n• Opportunity to meet neighbors\n\nRecommended to come with family!\n\nBest regards,\nBuilding Committee'
+                },
+                date: '2025-02-01',
+                eventDate: '2025-02-20',
+                eventTime: '19:30',
+                eventLocation: { he: 'גינת הבניין', en: 'Building Garden' },
+                eventDuration: { he: 'כשעתיים', en: 'About 2 hours' },
+                isRead: true,
+                icon: '🎯',
+                rsvp: { yes: 24, no: 3 },
+                userRsvp: 'yes'
+            },
+            {
+                id: 5,
+                type: 'maintenance',
+                title: { he: 'תחזוקת מעלית', en: 'Elevator Maintenance' },
+                preview: { he: 'המעלית תעצר לתחזוקה שנתית ביום חמישי.', en: 'The elevator will stop for annual maintenance on Thursday.' },
+                content: {
+                    he: 'שכנים יקרים,\n\nביום חמישי, ה-8.2.2025, בין השעות 09:00-13:00, תתבצע תחזוקה שנתית למעלית.\n\nבמהלך העבודות המעלית תהיה מושבתת.\n\nאנא תכננו בהתאם.\n\nתודה על ההבנה,\nועד הבית',
+                    en: 'Dear residents,\n\nOn Thursday, February 8th, 2025, between 09:00-13:00, annual elevator maintenance will be performed.\n\nDuring the work the elevator will be out of service.\n\nPlease plan accordingly.\n\nThank you for your understanding,\nBuilding Committee'
+                },
+                date: '2025-02-02',
+                isRead: true,
+                icon: '🛗'
+            }
+        ];
+
+        const typeIcons = {
+            urgent: '⚠️',
+            event: '📅',
+            info: 'ℹ️',
+            maintenance: '🔧'
+        };
+
+        // Components
+        const NoticeCard = ({ notice, onClick }) => {
+            const { t, lang } = useLanguage();
+            const isEvent = notice.type === 'event';
+
+            const formatDate = (dateStr) => {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US', {
+                    day: 'numeric',
+                    month: 'short'
+                });
+            };
+
+            return (
+                <div className={`notice-card ${!notice.isRead ? 'unread' : ''}`} onClick={onClick}>
+                    <div className="notice-header">
+                        <div className={`notice-icon ${notice.type}`}>
+                            {notice.icon}
+                        </div>
+                        <div className="notice-content">
+                            <div className="notice-meta">
+                                <span className={`notice-type ${notice.type}`}>
+                                    {t.types[notice.type]}
+                                </span>
+                                <span className="notice-date">{formatDate(notice.date)}</span>
+                            </div>
+                            <h3 className="notice-title">{notice.title[lang]}</h3>
+                            <p className="notice-preview">{notice.preview[lang]}</p>
+                        </div>
+                    </div>
+                    {isEvent && (
+                        <div className="event-footer">
+                            <div className="event-date-time">
+                                <span className="event-date">{formatDate(notice.eventDate)}</span>
+                                <span className="event-time">{notice.eventTime}</span>
+                            </div>
+                            <div className="event-rsvp">
+                                <span className="rsvp-count">{notice.rsvp.yes} {t.rsvp.attending}</span>
+                                <div className="rsvp-avatars">
+                                    <div className="rsvp-avatar">ד</div>
+                                    <div className="rsvp-avatar">י</div>
+                                    <div className="rsvp-avatar">+{notice.rsvp.yes - 2}</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const NoticeDetailModal = ({ notice, isOpen, onClose, onRsvp }) => {
+            const { t, lang } = useLanguage();
+            if (!notice) return null;
+
+            const isEvent = notice.type === 'event';
+
+            const formatDate = (dateStr) => {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            };
+
+            return (
+                <div className={`modal-overlay ${isOpen ? 'active' : ''}`} onClick={onClose}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <span className={`notice-type ${notice.type}`}>
+                                {t.types[notice.type]}
+                            </span>
+                            <button className="modal-close" onClick={onClose}>✕</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className={`notice-detail-icon notice-icon ${notice.type}`}>
+                                {notice.icon}
+                            </div>
+                            <h2 className="notice-detail-title">{notice.title[lang]}</h2>
+                            <div className="notice-detail-meta">
+                                <span className="notice-date">{formatDate(notice.date)}</span>
+                            </div>
+
+                            {isEvent && (
+                                <div className="event-info-card">
+                                    <div className="event-info-row">
+                                        <span className="event-info-icon">📅</span>
+                                        <div>
+                                            <div className="event-info-label">{t.event.when}</div>
+                                            <div className="event-info-value">
+                                                {formatDate(notice.eventDate)} • {notice.eventTime}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="event-info-row">
+                                        <span className="event-info-icon">📍</span>
+                                        <div>
+                                            <div className="event-info-label">{t.event.where}</div>
+                                            <div className="event-info-value">{notice.eventLocation[lang]}</div>
+                                        </div>
+                                    </div>
+                                    <div className="event-info-row">
+                                        <span className="event-info-icon">⏱️</span>
+                                        <div>
+                                            <div className="event-info-label">{t.event.duration}</div>
+                                            <div className="event-info-value">{notice.eventDuration[lang]}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="notice-detail-content">
+                                {notice.content[lang].split('\n').map((line, i) => (
+                                    <p key={i} style={{ marginBottom: line ? '0.5rem' : '1rem' }}>{line}</p>
+                                ))}
+                            </div>
+
+                            {isEvent && (
+                                <div className="rsvp-section">
+                                    <h3 className="rsvp-title">{t.rsvp.title}</h3>
+                                    <div className="rsvp-buttons">
+                                        <button
+                                            className={`rsvp-btn yes ${notice.userRsvp === 'yes' ? 'selected' : ''}`}
+                                            onClick={() => onRsvp(notice.id, 'yes')}
+                                        >
+                                            <span className="rsvp-btn-icon">✓</span>
+                                            {t.rsvp.yes}
+                                        </button>
+                                        <button
+                                            className={`rsvp-btn no ${notice.userRsvp === 'no' ? 'selected' : ''}`}
+                                            onClick={() => onRsvp(notice.id, 'no')}
+                                        >
+                                            <span className="rsvp-btn-icon">✗</span>
+                                            {t.rsvp.no}
+                                        </button>
+                                    </div>
+                                    <div className="rsvp-stats">
+                                        <div className="rsvp-stat">
+                                            <div className="rsvp-stat-value yes">{notice.rsvp.yes}</div>
+                                            <div className="rsvp-stat-label">{t.rsvp.attending}</div>
+                                        </div>
+                                        <div className="rsvp-stat">
+                                            <div className="rsvp-stat-value no">{notice.rsvp.no}</div>
+                                            <div className="rsvp-stat-label">{t.rsvp.notAttending}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const BottomNav = () => {
+            const { t } = useLanguage();
+            const navItems = [
+                { id: 'home', icon: '🏠', label: t.nav.home, href: 'index.html' },
+                { id: 'faults', icon: '🔧', label: t.nav.faults, href: 'faults.html' },
+                { id: 'notices', icon: '🔔', label: t.nav.notices, href: 'notices.html', active: true },
+                { id: 'community', icon: '👥', label: t.nav.community, href: 'community.html' },
+                { id: 'profile', icon: '👤', label: t.nav.profile, href: 'profile.html' }
+            ];
+
+            return (
+                <nav className="bottom-nav">
+                    {navItems.map(item => (
+                        <a
+                            key={item.id}
+                            href={item.href}
+                            className={`nav-item ${item.active ? 'active' : ''}`}
+                        >
+                            <span className="nav-icon">{item.icon}</span>
+                            <span className="nav-label">{item.label}</span>
+                            {item.badge && !item.active && <span className="nav-badge" />}
+                        </a>
+                    ))}
+                </nav>
+            );
+        };
+
+        const App = () => {
+            const { t } = useLanguage();
+            const [activeTab, setActiveTab] = useState('all');
+            const [selectedNotice, setSelectedNotice] = useState(null);
+            const [notices, setNotices] = useState(mockNotices);
+
+            const unreadCount = notices.filter(n => !n.isRead).length;
+
+            const filteredNotices = activeTab === 'all'
+                ? notices
+                : notices.filter(n => n.type === activeTab || (activeTab === 'events' && n.type === 'event'));
+
+            const handleRsvp = (noticeId, response) => {
+                setNotices(prev => prev.map(n => {
+                    if (n.id === noticeId) {
+                        const oldRsvp = n.userRsvp;
+                        const newRsvp = { ...n.rsvp };
+
+                        if (oldRsvp === 'yes') newRsvp.yes--;
+                        if (oldRsvp === 'no') newRsvp.no--;
+                        if (response === 'yes') newRsvp.yes++;
+                        if (response === 'no') newRsvp.no++;
+
+                        return { ...n, userRsvp: response, rsvp: newRsvp };
+                    }
+                    return n;
+                }));
+                setSelectedNotice(prev => prev ? { ...prev, userRsvp: response } : null);
+            };
+
+            const handleOpenNotice = (notice) => {
+                setSelectedNotice(notice);
+                if (!notice.isRead) {
+                    setNotices(prev => prev.map(n =>
+                        n.id === notice.id ? { ...n, isRead: true } : n
+                    ));
+                }
+            };
+
+            return (
+                <div className="app-container">
+                    <header className="page-header">
+                        <div className="header-row">
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <h1 className="page-title">{t.title}</h1>
+                                {unreadCount > 0 && (
+                                    <span className="unread-badge">{unreadCount}</span>
+                                )}
+                            </div>
+                        </div>
+                    </header>
+
+                    <div className="tabs">
+                        <button
+                            className={`tab ${activeTab === 'all' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('all')}
+                        >
+                            {t.tabs.all}
+                        </button>
+                        <button
+                            className={`tab ${activeTab === 'urgent' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('urgent')}
+                        >
+                            {t.tabs.urgent}
+                        </button>
+                        <button
+                            className={`tab ${activeTab === 'events' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('events')}
+                        >
+                            {t.tabs.events}
+                        </button>
+                        <button
+                            className={`tab ${activeTab === 'info' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('info')}
+                        >
+                            {t.tabs.info}
+                        </button>
+                    </div>
+
+                    <main className="main-content">
+                        {filteredNotices.map(notice => (
+                            <NoticeCard
+                                key={notice.id}
+                                notice={notice}
+                                onClick={() => handleOpenNotice(notice)}
+                            />
+                        ))}
+                    </main>
+
+                    <BottomNav />
+
+                    <NoticeDetailModal
+                        notice={selectedNotice}
+                        isOpen={!!selectedNotice}
+                        onClose={() => setSelectedNotice(null)}
+                        onRsvp={handleRsvp}
+                    />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            <LanguageProvider>
+                <App />
+            </LanguageProvider>
+        );
+    </script>
+</body>
+</html>

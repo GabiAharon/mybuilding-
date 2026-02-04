@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#D4785C">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>MyBuilding - פרופיל</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #D4785C;
+            --color-primary-dark: #B8614A;
+            --color-primary-light: #E8A18C;
+            --color-secondary: #2D5A4A;
+            --color-cream: #FFF9F5;
+            --color-sand: #F5E6D8;
+            --color-sand-dark: #E8D4C4;
+            --color-text: #3D2E2A;
+            --color-text-muted: #8B7355;
+            --color-text-light: #B8A090;
+            --color-success: #4A9D7C;
+            --color-success-bg: #E8F5F0;
+            --color-danger: #C75D5D;
+            --color-danger-bg: #FCF0F0;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --shadow-sm: 0 2px 8px rgba(61, 46, 42, 0.06);
+            --shadow-md: 0 4px 16px rgba(61, 46, 42, 0.08);
+            --shadow-lg: 0 8px 32px rgba(61, 46, 42, 0.12);
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Rubik', sans-serif;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: var(--font-body);
+            background: var(--color-cream);
+            color: var(--color-text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            line-height: 1.5;
+        }
+        [dir="rtl"] { text-align: right; }
+
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--color-cream);
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            padding: var(--space-2xl) var(--space-lg);
+            padding-top: calc(var(--safe-top) + var(--space-2xl));
+            text-align: center;
+            color: white;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto var(--space-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .profile-apartment {
+            opacity: 0.9;
+            font-size: 0.9375rem;
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(255,255,255,0.2);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: var(--space-md);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--space-lg);
+            padding-bottom: calc(80px + var(--safe-bottom) + var(--space-lg));
+        }
+
+        /* Menu Section */
+        .menu-section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .menu-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-sm);
+            padding: 0 var(--space-sm);
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            text-decoration: none;
+            color: var(--color-text);
+            transition: background 0.2s ease;
+            border-bottom: 1px solid var(--color-sand);
+        }
+
+        .menu-item:last-child { border-bottom: none; }
+
+        .menu-item:hover { background: var(--color-sand); }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: var(--color-sand);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .menu-icon.admin { background: var(--color-success-bg); }
+        .menu-icon.danger { background: var(--color-danger-bg); }
+
+        .menu-content { flex: 1; }
+
+        .menu-label {
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+
+        .menu-desc {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .menu-arrow {
+            color: var(--color-text-light);
+            font-size: 1rem;
+        }
+
+        [dir="rtl"] .menu-arrow { transform: rotate(180deg); }
+
+        /* Language Toggle */
+        .language-toggle {
+            display: flex;
+            background: var(--color-sand);
+            border-radius: var(--radius-full);
+            padding: var(--space-xs);
+            margin-top: var(--space-lg);
+        }
+
+        .lang-btn {
+            flex: 1;
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            background: transparent;
+            color: var(--color-text-muted);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--color-text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Version */
+        .version-text {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            margin-top: var(--space-xl);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-top: 1px solid var(--color-sand);
+            padding: var(--space-sm) var(--space-md);
+            padding-bottom: calc(var(--safe-bottom) + var(--space-sm));
+            display: flex;
+            justify-content: space-around;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 24px;
+            height: 3px;
+            background: var(--color-primary);
+            border-radius: var(--radius-full);
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+
+        .nav-item.active::before { transform: translateX(-50%) scaleX(1); }
+
+        .nav-icon {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+        }
+
+        .nav-item.active .nav-icon { color: var(--color-primary); }
+
+        .nav-label {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--color-text-light);
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: 4px;
+            right: 12px;
+            width: 8px;
+            height: 8px;
+            background: var(--color-danger);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, createContext, useContext } = React;
+
+        const translations = {
+            he: {
+                profile: 'פרופיל',
+                apartment: 'דירה',
+                building: 'מגדלי הים',
+                verified: 'מאומת',
+                sections: {
+                    account: 'חשבון',
+                    building: 'בניין',
+                    app: 'אפליקציה'
+                },
+                menu: {
+                    editProfile: 'עריכת פרטים',
+                    editProfileDesc: 'שם, טלפון, סיסמה',
+                    payments: 'היסטוריית תשלומים',
+                    paymentsDesc: 'צפה בכל התשלומים שלך',
+                    myFaults: 'התקלות שלי',
+                    myFaultsDesc: 'תקלות שדיווחת',
+                    admin: 'לוח בקרה מנהל',
+                    adminDesc: 'ניהול הבניין',
+                    notifications: 'התראות',
+                    notificationsDesc: 'הגדרות push notifications',
+                    language: 'שפה',
+                    about: 'אודות',
+                    aboutDesc: 'גרסה ומידע',
+                    logout: 'התנתק',
+                    logoutDesc: 'יציאה מהחשבון'
+                },
+                nav: { home: 'בית', faults: 'תקלות', notices: 'הודעות', community: 'קהילה', profile: 'פרופיל' },
+                version: 'גרסה 1.0.0'
+            },
+            en: {
+                profile: 'Profile',
+                apartment: 'Apt',
+                building: 'Sea Towers',
+                verified: 'Verified',
+                sections: {
+                    account: 'Account',
+                    building: 'Building',
+                    app: 'App'
+                },
+                menu: {
+                    editProfile: 'Edit Profile',
+                    editProfileDesc: 'Name, phone, password',
+                    payments: 'Payment History',
+                    paymentsDesc: 'View all your payments',
+                    myFaults: 'My Reports',
+                    myFaultsDesc: 'Issues you reported',
+                    admin: 'Admin Dashboard',
+                    adminDesc: 'Building management',
+                    notifications: 'Notifications',
+                    notificationsDesc: 'Push notification settings',
+                    language: 'Language',
+                    about: 'About',
+                    aboutDesc: 'Version and info',
+                    logout: 'Logout',
+                    logoutDesc: 'Sign out of account'
+                },
+                nav: { home: 'Home', faults: 'Issues', notices: 'Notices', community: 'Community', profile: 'Profile' },
+                version: 'Version 1.0.0'
+            }
+        };
+
+        const LanguageContext = createContext();
+        const LanguageProvider = ({ children }) => {
+            const [lang, setLang] = useState('he');
+            const t = translations[lang];
+            const isRTL = lang === 'he';
+            useEffect(() => {
+                document.documentElement.lang = lang;
+                document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            }, [lang, isRTL]);
+            return (
+                <LanguageContext.Provider value={{ lang, t, isRTL, setLang }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+        const useLanguage = () => useContext(LanguageContext);
+
+        const mockUser = {
+            name: { he: 'דוד כהן', en: 'David Cohen' },
+            apartment: '12',
+            isAdmin: true
+        };
+
+        const MenuItem = ({ icon, label, desc, href, iconClass }) => (
+            <a href={href || '#'} className="menu-item">
+                <div className={`menu-icon ${iconClass || ''}`}>{icon}</div>
+                <div className="menu-content">
+                    <div className="menu-label">{label}</div>
+                    {desc && <div className="menu-desc">{desc}</div>}
+                </div>
+                <span className="menu-arrow">→</span>
+            </a>
+        );
+
+        const BottomNav = () => {
+            const { t } = useLanguage();
+            const navItems = [
+                { id: 'home', icon: '🏠', label: t.nav.home, href: 'index.html' },
+                { id: 'faults', icon: '🔧', label: t.nav.faults, href: 'faults.html' },
+                { id: 'notices', icon: '🔔', label: t.nav.notices, href: 'notices.html', badge: true },
+                { id: 'community', icon: '👥', label: t.nav.community, href: 'community.html' },
+                { id: 'profile', icon: '👤', label: t.nav.profile, href: 'profile.html', active: true }
+            ];
+
+            return (
+                <nav className="bottom-nav">
+                    {navItems.map(item => (
+                        <a
+                            key={item.id}
+                            href={item.href}
+                            className={`nav-item ${item.active ? 'active' : ''}`}
+                        >
+                            <span className="nav-icon">{item.icon}</span>
+                            <span className="nav-label">{item.label}</span>
+                            {item.badge && !item.active && <span className="nav-badge" />}
+                        </a>
+                    ))}
+                </nav>
+            );
+        };
+
+        const App = () => {
+            const { t, lang, setLang } = useLanguage();
+
+            return (
+                <div className="app-container">
+                    <header className="profile-header">
+                        <div className="profile-avatar">👤</div>
+                        <h1 className="profile-name">{mockUser.name[lang]}</h1>
+                        <p className="profile-apartment">
+                            {t.apartment} {mockUser.apartment} • {t.building}
+                        </p>
+                        <span className="profile-badge">
+                            ✓ {t.verified}
+                        </span>
+                    </header>
+
+                    <main className="main-content">
+                        <div className="menu-section">
+                            <h3 className="menu-title">{t.sections.account}</h3>
+                            <div className="menu-card">
+                                <MenuItem icon="✏️" label={t.menu.editProfile} desc={t.menu.editProfileDesc} />
+                                <MenuItem icon="💳" label={t.menu.payments} desc={t.menu.paymentsDesc} />
+                                <MenuItem icon="📋" label={t.menu.myFaults} desc={t.menu.myFaultsDesc} href="faults.html" />
+                            </div>
+                        </div>
+
+                        {mockUser.isAdmin && (
+                            <div className="menu-section">
+                                <h3 className="menu-title">{t.sections.building}</h3>
+                                <div className="menu-card">
+                                    <MenuItem
+                                        icon="👑"
+                                        label={t.menu.admin}
+                                        desc={t.menu.adminDesc}
+                                        href="admin.html"
+                                        iconClass="admin"
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="menu-section">
+                            <h3 className="menu-title">{t.sections.app}</h3>
+                            <div className="menu-card">
+                                <MenuItem icon="🔔" label={t.menu.notifications} desc={t.menu.notificationsDesc} />
+                                <MenuItem icon="ℹ️" label={t.menu.about} desc={t.menu.aboutDesc} />
+                            </div>
+                        </div>
+
+                        <div className="language-toggle">
+                            <button
+                                className={`lang-btn ${lang === 'he' ? 'active' : ''}`}
+                                onClick={() => setLang('he')}
+                            >
+                                🇮🇱 עברית
+                            </button>
+                            <button
+                                className={`lang-btn ${lang === 'en' ? 'active' : ''}`}
+                                onClick={() => setLang('en')}
+                            >
+                                🇺🇸 English
+                            </button>
+                        </div>
+
+                        <div className="menu-section" style={{ marginTop: 'var(--space-lg)' }}>
+                            <div className="menu-card">
+                                <MenuItem
+                                    icon="🚪"
+                                    label={t.menu.logout}
+                                    desc={t.menu.logoutDesc}
+                                    href="auth.html"
+                                    iconClass="danger"
+                                />
+                            </div>
+                        </div>
+
+                        <p className="version-text">{t.version}</p>
+                    </main>
+
+                    <BottomNav />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            <LanguageProvider>
+                <App />
+            </LanguageProvider>
+        );
+    </script>
+</body>
+</html>
