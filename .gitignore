@@ -8,6 +8,8 @@ dist/
 .env.local
 .env.production.local
 
-# Private config - generated at build time, NEVER COMMIT
+# Private config in root - NEVER COMMIT (use for local dev only)
 config.js
-public/config.js
+
+# Note: public/config.js IS committed as a default template
+# The prebuild script overwrites it with real values from env vars
