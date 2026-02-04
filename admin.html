@@ -1053,7 +1053,8 @@
                     sendReminder: 'שלח תזכורת',
                     sent: 'נשלח',
                     apartment: 'דירה',
-                    debt: 'חוב'
+                    debt: 'חוב',
+                    empty: 'אין חייבים כרגע'
                 },
                 expenses: {
                     add: 'הוסף הוצאה',
@@ -1074,14 +1075,16 @@
                         receipt: 'קבלה',
                         uploadReceipt: 'העלה קבלה',
                         submit: 'הוסף הוצאה'
-                    }
+                    },
+                    empty: 'אין הוצאות עדיין'
                 },
                 users: {
                     filter: { all: 'הכל', pending: 'ממתינים', active: 'פעילים' },
                     status: { pending: 'ממתין', active: 'פעיל', admin: 'מנהל' },
                     apartment: 'דירה',
                     approve: 'אשר',
-                    reject: 'דחה'
+                    reject: 'דחה',
+                    empty: 'אין משתמשים רשומים עדיין'
                 },
                 nav: { dashboard: 'בקרה', residents: 'דיירים', settings: 'הגדרות', exit: 'יציאה' },
                 admins: {
@@ -1117,7 +1120,8 @@
                     sendReminder: 'Send Reminder',
                     sent: 'Sent',
                     apartment: 'Apt',
-                    debt: 'Debt'
+                    debt: 'Debt',
+                    empty: 'No debtors at the moment'
                 },
                 expenses: {
                     add: 'Add Expense',
@@ -1138,14 +1142,16 @@
                         receipt: 'Receipt',
                         uploadReceipt: 'Upload Receipt',
                         submit: 'Add Expense'
-                    }
+                    },
+                    empty: 'No expenses yet'
                 },
                 users: {
                     filter: { all: 'All', pending: 'Pending', active: 'Active' },
                     status: { pending: 'Pending', active: 'Active', admin: 'Admin' },
                     apartment: 'Apt',
                     approve: 'Approve',
-                    reject: 'Reject'
+                    reject: 'Reject',
+                    empty: 'No registered users yet'
                 },
                 nav: { dashboard: 'Dashboard', residents: 'Residents', settings: 'Settings', exit: 'Exit' },
                 admins: {
@@ -1182,25 +1188,10 @@
         const useLanguage = () => useContext(LanguageContext);
 
         // Mock Data
-        const mockDebtors = [
-            { id: 1, name: { he: 'יוסי כהן', en: 'Yossi Cohen' }, apartment: '3', amount: 1200, reminded: false },
-            { id: 2, name: { he: 'משה לוי', en: 'Moshe Levi' }, apartment: '7', amount: 2400, reminded: true },
-            { id: 3, name: { he: 'דוד ישראלי', en: 'David Israeli' }, apartment: '11', amount: 800, reminded: false },
-            { id: 4, name: { he: 'רחל אברהם', en: 'Rachel Abraham' }, apartment: '15', amount: 400, reminded: false }
-        ];
-
-        const mockExpenses = [
-            { id: 1, category: 'cleaning', name: { he: 'ניקיון חודשי', en: 'Monthly Cleaning' }, amount: 2500, date: '2025-02-01', hasReceipt: true },
-            { id: 2, category: 'electricity', name: { he: 'חשמל חדר מדרגות', en: 'Stairwell Electricity' }, amount: 850, date: '2025-02-03', hasReceipt: true },
-            { id: 3, category: 'maintenance', name: { he: 'תיקון אינטרקום', en: 'Intercom Repair' }, amount: 450, date: '2025-01-28', hasReceipt: true }
-        ];
-
-        const mockUsers = [
-            { id: 1, name: { he: 'שרה גולן', en: 'Sarah Golan' }, apartment: '18', status: 'pending', type: 'owner' },
-            { id: 2, name: { he: 'אבי מזרחי', en: 'Avi Mizrahi' }, apartment: '2', status: 'active', type: 'owner' },
-            { id: 3, name: { he: 'מיכל דוד', en: 'Michal David' }, apartment: '9', status: 'admin', type: 'owner' },
-            { id: 4, name: { he: 'יעקב פרץ', en: 'Yaakov Peretz' }, apartment: '14', status: 'pending', type: 'tenant' }
-        ];
+        // Empty data - will be populated from database
+        const mockDebtors = [];
+        const mockExpenses = [];
+        const mockUsers = [];
 
         const categoryIcons = {
             cleaning: '🧹',
@@ -1230,7 +1221,7 @@
 
                     <div className="balance-display">
                         <div className="balance-label">{t.finance.balance}</div>
-                        <div className="balance-amount">₪47,850</div>
+                        <div className="balance-amount">₪0</div>
                     </div>
 
                     <div className="finance-row">
@@ -1238,7 +1229,7 @@
                             <div className="finance-row-icon income">📈</div>
                             <span>{t.finance.income}</span>
                         </div>
-                        <span className="finance-row-amount income">+₪14,400</span>
+                        <span className="finance-row-amount income">+₪0</span>
                     </div>
 
                     <div className="finance-row">
@@ -1246,7 +1237,7 @@
                             <div className="finance-row-icon expense">📉</div>
                             <span>{t.finance.expenses}</span>
                         </div>
-                        <span className="finance-row-amount expense">-₪3,800</span>
+                        <span className="finance-row-amount expense">-₪0</span>
                     </div>
 
                     <div className="chart-container">
@@ -1285,6 +1276,15 @@
                 ));
             };
 
+            if (debtors.length === 0) {
+                return (
+                    <div className="no-admins-message" style={{ padding: 'var(--space-2xl)', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>✅</div>
+                        <div>{t.debtors.empty}</div>
+                    </div>
+                );
+            }
+
             return (
                 <div>
                     {debtors.map(debtor => (
@@ -1314,23 +1314,30 @@
 
             return (
                 <div>
-                    {mockExpenses.map(expense => (
-                        <div key={expense.id} className="expense-card">
-                            <div className="expense-header">
-                                <div className="expense-category">
-                                    <div className="expense-icon">{categoryIcons[expense.category]}</div>
-                                    <div>
-                                        <div className="expense-name">{expense.name[lang]}</div>
-                                        <div className="expense-date">{expense.date}</div>
-                                    </div>
-                                </div>
-                                <div className="expense-amount">₪{expense.amount.toLocaleString()}</div>
-                            </div>
-                            {expense.hasReceipt && (
-                                <div className="expense-receipt">📎 {t.expenses.receipt}</div>
-                            )}
+                    {mockExpenses.length === 0 ? (
+                        <div className="no-admins-message" style={{ padding: 'var(--space-xl)', textAlign: 'center', marginBottom: 'var(--space-md)' }}>
+                            <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>📋</div>
+                            <div>{t.expenses.empty}</div>
                         </div>
-                    ))}
+                    ) : (
+                        mockExpenses.map(expense => (
+                            <div key={expense.id} className="expense-card">
+                                <div className="expense-header">
+                                    <div className="expense-category">
+                                        <div className="expense-icon">{categoryIcons[expense.category]}</div>
+                                        <div>
+                                            <div className="expense-name">{expense.name[lang]}</div>
+                                            <div className="expense-date">{expense.date}</div>
+                                        </div>
+                                    </div>
+                                    <div className="expense-amount">₪{expense.amount.toLocaleString()}</div>
+                                </div>
+                                {expense.hasReceipt && (
+                                    <div className="expense-receipt">📎 {t.expenses.receipt}</div>
+                                )}
+                            </div>
+                        ))
+                    )}
                     <button className="add-expense-btn" onClick={onAdd}>
                         ➕ {t.expenses.add}
                     </button>
@@ -1358,6 +1365,15 @@
             const handleReject = (id) => {
                 setUsers(prev => prev.filter(u => u.id !== id));
             };
+
+            if (users.length === 0) {
+                return (
+                    <div className="no-admins-message" style={{ padding: 'var(--space-2xl)', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>👥</div>
+                        <div>{t.users.empty}</div>
+                    </div>
+                );
+            }
 
             return (
                 <div>
@@ -1626,9 +1642,9 @@
 
             const tabs = [
                 { id: 'finance', icon: '💰', label: t.tabs.finance },
-                { id: 'debtors', icon: '📋', label: t.tabs.debtors, badge: 4 },
+                { id: 'debtors', icon: '📋', label: t.tabs.debtors },
                 { id: 'expenses', icon: '🧾', label: t.tabs.expenses },
-                { id: 'users', icon: '👥', label: t.tabs.users, badge: 2 },
+                { id: 'users', icon: '👥', label: t.tabs.users },
                 { id: 'admins', icon: '👑', label: t.tabs.admins }
             ];
 
@@ -1644,15 +1660,15 @@
 
                     <div className="stats-row">
                         <div className="stat-card">
-                            <div className="stat-value positive">₪47.8K</div>
+                            <div className="stat-value positive">₪0</div>
                             <div className="stat-label">{t.stats.balance}</div>
                         </div>
                         <div className="stat-card">
-                            <div className="stat-value negative">4</div>
+                            <div className="stat-value neutral">0</div>
                             <div className="stat-label">{t.stats.debtors}</div>
                         </div>
                         <div className="stat-card">
-                            <div className="stat-value neutral">24</div>
+                            <div className="stat-value neutral">0</div>
                             <div className="stat-label">{t.stats.apartments}</div>
                         </div>
                     </div>

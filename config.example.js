@@ -9,8 +9,10 @@ window.APP_CONFIG = {
   ADMIN_EMAILS: [],
 
   // Building configuration
-  BUILDING_NAME: "מגדלי הים",
-  BUILDING_NAME_EN: "Sea Towers",
+  BUILDING_NAME: "שם הבניין",
+  BUILDING_NAME_EN: "Building Name",
+  BUILDING_ADDRESS: "כתובת הבניין",
+  BUILDING_ADDRESS_EN: "Building Address",
 
   // Invitation secret (used to generate secure invitation links)
   INVITATION_SECRET: "change-this-to-a-random-string"

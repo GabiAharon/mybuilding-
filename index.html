@@ -10,6 +10,9 @@
     <link rel="manifest" href="manifest.json">
     <title>MyBuilding - הבית שלי</title>
 
+    <!-- Load config (contains admin emails - gitignored) -->
+    <script src="config.js"></script>
+
     <!-- Fonts: Rubik for Hebrew/English + Fraunces for display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -844,7 +847,8 @@
                     seeAll: 'כל ההודעות',
                     urgent: 'דחוף',
                     event: 'אירוע',
-                    info: 'מידע'
+                    info: 'מידע',
+                    empty: 'אין הודעות חדשות'
                 },
                 nav: {
                     home: 'בית',
@@ -884,7 +888,8 @@
                     seeAll: 'See All',
                     urgent: 'Urgent',
                     event: 'Event',
-                    info: 'Info'
+                    info: 'Info',
+                    empty: 'No new notices'
                 },
                 nav: {
                     home: 'Home',
@@ -925,47 +930,44 @@
         const useLanguage = () => useContext(LanguageContext);
 
         // ============================================
-        // MOCK DATA
+        // CONFIG HELPER
+        // ============================================
+        const getConfig = () => {
+            return window.APP_CONFIG || {
+                ADMIN_EMAIL: '',
+                ADMIN_EMAILS: [],
+                BUILDING_NAME: 'הבניין שלי',
+                BUILDING_NAME_EN: 'My Building'
+            };
+        };
+
+        const isAdmin = (email) => {
+            const config = getConfig();
+            return email === config.ADMIN_EMAIL || (config.ADMIN_EMAILS || []).includes(email);
+        };
+
+        // ============================================
+        // USER DATA - Will be populated from database
         // ============================================
         const mockUser = {
-            name: { he: 'דוד', en: 'David' },
-            apartmentNumber: '12',
-            buildingName: { he: 'מגדלי הים', en: 'Sea Towers' }
+            name: { he: '', en: '' },
+            email: '',
+            apartmentNumber: '',
+            buildingName: {
+                he: getConfig().BUILDING_NAME,
+                en: getConfig().BUILDING_NAME_EN
+            }
         };
 
         const mockPayment = {
             year: 2025,
-            isPaid: true,
-            amount: 4800,
-            paidAmount: 4800
+            isPaid: false,
+            amount: 0,
+            paidAmount: 0
         };
 
-        const mockNotices = [
-            {
-                id: 1,
-                title: { he: 'הפסקת מים מתוכננת', en: 'Planned Water Shutdown' },
-                preview: { he: 'ביום שלישי הקרוב, 10:00-14:00, יתבצעו עבודות תחזוקה במערכת המים.', en: 'This Tuesday, 10:00-14:00, maintenance work will be performed on the water system.' },
-                date: '2025-02-06',
-                type: 'urgent',
-                isRead: false
-            },
-            {
-                id: 2,
-                title: { he: 'אסיפת דיירים שנתית', en: 'Annual Residents Meeting' },
-                preview: { he: 'מוזמנים לאסיפת הדיירים השנתית שתתקיים ביום חמישי בשעה 20:00 בלובי.', en: 'You are invited to the annual residents meeting on Thursday at 20:00 in the lobby.' },
-                date: '2025-02-10',
-                type: 'event',
-                isRead: false
-            },
-            {
-                id: 3,
-                title: { he: 'עדכון שעות ניקיון', en: 'Cleaning Hours Update' },
-                preview: { he: 'החל מהשבוע הבא, הניקיון יתבצע בימי שני ורביעי בין השעות 08:00-12:00.', en: 'Starting next week, cleaning will be done on Mondays and Wednesdays between 08:00-12:00.' },
-                date: '2025-02-03',
-                type: 'info',
-                isRead: true
-            }
-        ];
+        // Empty notices - will be populated from database
+        const mockNotices = [];
 
         // ============================================
         // UTILITY FUNCTIONS
@@ -1157,16 +1159,23 @@
                 <section className="notices-section">
                     <div className="notices-header">
                         <h2 className="section-title">{t.notices.title}</h2>
-                        <a href="#" className="see-all-link">
+                        <a href="notices.html" className="see-all-link">
                             {t.notices.seeAll}
                             <Icons.ArrowRight />
                         </a>
                     </div>
-                    <div className="notices-scroll">
-                        {mockNotices.map(notice => (
-                            <NoticeCard key={notice.id} notice={notice} />
-                        ))}
-                    </div>
+                    {mockNotices.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--color-text-muted)' }}>
+                            <div style={{ fontSize: '2rem', marginBottom: 'var(--space-sm)' }}>📭</div>
+                            <div>{t.notices.empty}</div>
+                        </div>
+                    ) : (
+                        <div className="notices-scroll">
+                            {mockNotices.map(notice => (
+                                <NoticeCard key={notice.id} notice={notice} />
+                            ))}
+                        </div>
+                    )}
                 </section>
             );
         };

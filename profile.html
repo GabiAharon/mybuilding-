@@ -7,6 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>MyBuilding - פרופיל</title>
 
+    <!-- Load config (contains admin emails - gitignored) -->
+    <script src="config.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -389,10 +392,27 @@
         };
         const useLanguage = () => useContext(LanguageContext);
 
+        // Config helper
+        const getConfig = () => {
+            return window.APP_CONFIG || {
+                ADMIN_EMAIL: '',
+                ADMIN_EMAILS: [],
+                BUILDING_NAME: 'הבניין שלי',
+                BUILDING_NAME_EN: 'My Building'
+            };
+        };
+
+        const isUserAdmin = (email) => {
+            const config = getConfig();
+            return email === config.ADMIN_EMAIL || (config.ADMIN_EMAILS || []).includes(email);
+        };
+
+        // User data - will be populated from database/auth
         const mockUser = {
-            name: { he: 'דוד כהן', en: 'David Cohen' },
-            apartment: '12',
-            isAdmin: true
+            name: { he: '', en: '' },
+            apartment: '',
+            email: '', // Will be set from auth
+            isAdmin: false // Will be computed from config
         };
 
         const MenuItem = ({ icon, label, desc, href, iconClass }) => (
@@ -459,7 +479,7 @@
                             </div>
                         </div>
 
-                        {mockUser.isAdmin && (
+                        {isUserAdmin(mockUser.email) && (
                             <div className="menu-section">
                                 <h3 className="menu-title">{t.sections.building}</h3>
                                 <div className="menu-card">
