@@ -8,5 +8,6 @@ dist/
 .env.local
 .env.production.local
 
-# Private config with admin emails - NEVER COMMIT
+# Private config - generated at build time, NEVER COMMIT
 config.js
+public/config.js

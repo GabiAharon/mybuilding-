@@ -10,8 +10,8 @@
     <link rel="manifest" href="manifest.json">
     <title>MyBuilding - הבית שלי</title>
 
-    <!-- Load config (contains admin emails - gitignored) -->
-    <script src="config.js"></script>
+    <!-- Load config (generated at build time from env vars) -->
+    <script src="/config.js"></script>
 
     <!-- Fonts: Rubik for Hebrew/English + Fraunces for display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -812,7 +812,7 @@
 
     <!-- Supabase Client (for authentication) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="src/supabase.js"></script>
+    <script src="/supabase.js"></script>
 
     <script type="text/babel">
         const { useState, useEffect, createContext, useContext } = React;
